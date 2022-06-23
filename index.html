@@ -28,6 +28,7 @@
     <div class="pogodaAktualna"> 
       <div>Temp. odczuwalna: <span class="temp_od"></span></div>
       <div>Ciśnienie: <span class="cisnienie"></span></div>
+      <div>Powietrze: <span class="powietrze"></span></div>
       <div>Wiatr: <span class="wiatr"></span>
       <table>
         <tr><td id="wiatrAktualna">
@@ -53,42 +54,35 @@
           <p id="temp1"></p>
           <p id="ico1"></p>
           <p id="opis1"></p> 
-          <p id="wiatro1"></p>
-          <div><div id="wiatri1"></div>
-        </div>
+          <p id="wiatr1"></p>
         </td>
         <td class="g2">
           <p id="godz2"></p>
           <p id="temp2"></p>
           <p id="ico2"></p>
           <p id="opis2"></p>
-          <p id="wiatro2"></p>
-          <div><td class="wiatri2">
-          </td></div>
+          <p id="wiatr2"></p>
         </td>
         <td class="g3">
           <p id="godz3"></p>
           <p id="temp3"></p>
           <p id="ico3"></p>
           <p id="opis3"></p> 
-          <p id="wiatro3"></p>
-          <div id="wiatri3"></div>
+          <p id="wiatr3"></p>
         </td>
         <td class="g4">
           <p id="godz4"></p>
           <p id="temp4"></p>
           <p id="ico4"></p>
           <p id="opis4"></p> 
-          <p id="wiatro4"></p>
-          <div id="wiatri4"></div> 
+          <p id="wiatr4"></p>
         </td>
         <td class="g5">
           <p id="godz5"></p>
           <p id="temp5"></p>
           <p id="ico5"></p>
           <p id="opis5"></p> 
-          <p id="wiatro5"></p>
-          <div id="wiatri5"></div>
+          <p id="wiatr5"></p>
         </td>
       </tr>
     </table>
@@ -150,6 +144,7 @@
     let elementTerazTemp = document.querySelector("#temp");
     let elementTerazTempO = document.querySelector(".pogodaAktualna .temp_od");
     let elementTerazCisnienie = document.querySelector(".pogodaAktualna .cisnienie");
+    let elementTerazPowietrze = document.querySelector(".pogodaAktualna .powietrze");
     let elementTerazWiatr = document.querySelector(".pogodaAktualna .wiatr");
 
     let elementGodzinowa1 = document.querySelector(".pogodaGodzinowa .g1 #godz1");
@@ -170,11 +165,12 @@
     let elementGodzinowaO4 = document.querySelector(".pogodaGodzinowa .g4 #opis4");
     let elementGodzinowaO5 = document.querySelector(".pogodaGodzinowa .g5 #opis5");
 
-    /*let elementDzisiajOpis = document.querySelector("#opisDzisiaj");
-    let elementDzisiajTemp = document.querySelector(".pogodaDzisiaj .temp");
-    let elementDzisiajZachmurzenie = document.querySelector(".pogodaDzisiaj .zachmurzenie");
-    let elementDzisiajWiatr = document.querySelector(".pogodaDzisiaj .wiatr");*/
-
+    let elementGodzinowaW1 = document.querySelector(".pogodaGodzinowa .g1 #wiatr1");
+    let elementGodzinowaW2 = document.querySelector(".pogodaGodzinowa .g2 #wiatr2");
+    let elementGodzinowaW3 = document.querySelector(".pogodaGodzinowa .g3 #wiatr3");
+    let elementGodzinowaW4 = document.querySelector(".pogodaGodzinowa .g4 #wiatr4");
+    let elementGodzinowaW5 = document.querySelector(".pogodaGodzinowa .g5 #wiatr5");
+  
     let elementJutroOpis = document.querySelector("#opisJutro");
     let elementJutroTemp = document.querySelector(".pogodaJutro .temp");
     let elementJutroZachmurzenie = document.querySelector(".pogodaJutro .zachmurzenie");
@@ -207,37 +203,45 @@
     function wstawObrazekGodzinowa(a, b){
       
           switch (a) {
-        case "burza": document.querySelector(b).innerHTML = "<img src='img/burza.png' width=50>";
+        case "01d": document.querySelector(b).innerHTML = "<img src='img/slonce.png' width=50>";
           break;
-        case "03d": document.querySelector(b).innerHTML = "<img src='img/chmury1.png' width=50>";
+        case "01n": document.querySelector(b).innerHTML = "<img src='img/slonce.png' width=50>";
           break;
-        case "04d": document.querySelector(b).innerHTML = "<img src='img/chmury2.png' width=50>";
+        case "02d": document.querySelector(b).innerHTML = "<img src='img/chmury1.png' width=50>";
           break;
-        case "04n": document.querySelector(b).innerHTML = "<img src='img/chmury2.png' width=50>";
+        case "02n": document.querySelector(b).innerHTML = "<img src='img/chmury1.png' width=50>";
+          break;
+        case "03d": document.querySelector(b).innerHTML = "<img src='img/chmury2.png' width=50>";
+          break;
+        case "03n": document.querySelector(b).innerHTML = "<img src='img/chmury2.png' width=50>";
+          break;
+        case "04d": document.querySelector(b).innerHTML = "<img src='img/chmury3.png' width=50>";
+          break;
+        case "04n": document.querySelector(b).innerHTML = "<img src='img/chmury3.png' width=50>";
+          break;
+        case "09d": document.querySelector(b).innerHTML = "<img src='img/deszcz2.png' width=50>";
+          break;
+        case "09n": document.querySelector(b).innerHTML = "<img src='img/deszcz2.png' width=50>";
+          break;
+        case "10d": document.querySelector(b).innerHTML = "<img src='img/deszcz1.png' width=50>";
+          break;
+        case "10n": document.querySelector(b).innerHTML = "<img src='img/deszcz1.png' width=50>";
+          break;
+        case "11d": document.querySelector(b).innerHTML = "<img src='img/burza.png' width=50>";
+          break;
+        case "11n": document.querySelector(b).innerHTML = "<img src='img/burza.png' width=50>";
           break;  
-        case '02d': document.querySelector(b).innerHTML = "<img src='img/chmury3.png' width=50>";
+        case "13d": document.querySelector(b).innerHTML = "<img src='img/snieg.png' width=50>";
           break;
-        case '10d': document.querySelector(b).innerHTML = "<img src='img/deszcz1.png' width=50>";
+        case "13n": document.querySelector(b).innerHTML = "<img src='img/snieg.png' width=50>";
           break;
-        case 'deszcz2': image.src = "img/deszcz2.png";
+        case "50d": document.querySelector(b).innerHTML = "<img src='img/mgla.png' width=50>";
           break;
-        case 'mgla': image.src = "img/mgla.png";
-          break;
-        case '01d': document.querySelector(b).innerHTML = "<img src='img/slonce.png' width=35>";
-          break;
-        case '01n ': document.querySelector(b).innerHTML = "<img src='img/slonce.png' width=35>";
-          break;
-        case 'snieg': image.src = "img/snieg.png";
-          break;
+        case "50n": document.querySelector(b).innerHTML = "<img src='img/mgla.png' width=50>";
+          break;           
       };
     }
 
-    function wstawWiatrGodzinowa(a, b, c, d) {
-
-    const obrot = 'rotate('+ b +'deg)';
-    document.querySelector(c).innerHTML = a + " m/s";
-    document.querySelector(d).innerHTML = "<img src='img/wiatr.png' width=20>";
-    document.querySelector(d).style.transform = obrot;}
     
     function wstawObrazek(a, b) {
 
@@ -250,27 +254,41 @@
         ctx.drawImage(image, 0, 0, canvas.width - 200, canvas.height - 20);
       });
       switch (a) {
-        case "burza": image.src = "img/burza.png";
+        case "01d": image.src = "img/slonce.png";
           break;
-        case "03d": image.src = "img/chmury1.png";
+        case "01n": image.src = "img/slonce.png";
           break;
-        case "04d": image.src = "img/chmury2.png";
+        case "02d": image.src = "img/chmury1.png";
           break;
-        case "04n": image.src = "img/chmury2.png";
+        case "02n": image.src = "img/chmury1.png";
           break;
-        case '02d': image.src = "img/chmury3.png";
+        case "03d": image.src = "img/chmury2.png";
           break;
-        case '10d': image.src = "img/deszcz1.png";
+        case "03n": image.src = "img/chmury2.png";
           break;
-        case 'deszcz2': image.src = "img/deszcz2.png";
+        case "04d": image.src = "img/chmury3.png";
           break;
-        case 'mgla': image.src = "img/mgla.png";
+        case "04n": image.src = "img/chmury3.png";
           break;
-        case '01d': image.src = "img/slonce.png";
+        case "09d": image.src = "img/deszcz2.png";
           break;
-        case '01n': image.src = "img/slonce.png";
+        case "09n": image.src = "img/deszcz2.png";
           break;
-        case 'snieg': image.src = "img/snieg.png";
+        case "10d": image.src = "img/deszcz1.png";
+          break;
+        case "10n": image.src = "img/deszcz1.png";
+          break;
+        case "11d": image.src = "img/burza.png";
+          break;
+        case "11n": image.src = "img/burza.png";
+          break;  
+        case "13d": image.src = "img/snieg.png";
+          break;
+        case "13n": image.src = "img/snieg.png";
+          break;
+        case "50d": image.src = "img/mgla.png";
+          break;
+        case "50n": image.src = "img/mgla.png";
           break;
       };
     };
@@ -284,7 +302,8 @@
 
     function pobierzMiasta(szukaj) {
 
-            //let miasto = document.querySelector("#szukaj").value;
+                
+      //let miasto = document.querySelector("#szukaj").value;
             let adresPar = "https://api.geoapify.com/v1/geocode/search?text="+szukaj+"&apiKey=5c1152da60b54e39b1f6e5dac9596307";
             fetch(adresPar)
             .then(res => res.json())
@@ -296,7 +315,7 @@
                   fetch(adresWeather)
                   .then(res => res.json())
                   .then(res => { 
-
+                    console.log(res);
             elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.city.name + " " + res.city.country;
             elementTerazOpis.innerHTML = res.list[0].weather[0].description;
             wstawObrazek(res.list[0].weather[0].icon, "#obrazekAktualna");
@@ -304,27 +323,24 @@
             elementTerazTemp.innerHTML = res.list[0].main.temp + " °C";
             elementTerazTempO.innerHTML = res.list[0].main.feels_like + " °C";
             elementTerazCisnienie.innerHTML = res.list[0].main.pressure + " hPa";
-            elementTerazWiatr.innerHTML = res.list[0].wind.speed + /*", prędkość: " + res.teraz.wiatrPrędkość + */" m/s";
+            elementTerazWiatr.innerHTML = res.list[0].wind.speed + " m/s";
 
             elementJutroOpis.innerHTML = res.list[8].weather[0].description;
             wstawObrazek(res.list[8].weather[0].icon, "#obrazekJutro");
             ustawWiatr(res.list[8].wind.deg, "#wiatrJutro");
             elementJutroTemp.innerHTML = res.list[8].main.temp + " °C";
-            //elementJutroZachmurzenie.innerHTML = res.prognoza.jutro.zachmurzenie + "%, ";
             elementJutroWiatr.innerHTML = res.list[8].wind.speed + " m/s";
 
             elementPojutrzeOpis.innerHTML = res.list[16].weather[0].description;
             wstawObrazek(res.list[16].weather[0].icon, "#obrazekPojutrze");
             ustawWiatr(res.list[16].wind.deg, "#wiatrPojutrze");
             elementPojutrzeTemp.innerHTML = res.list[16].main.temp + " °C";
-            //elementPojutrzeZachmurzenie.innerHTML = res.prognoza.pojutrze.zachmurzenie + "%, ";
             elementPojutrzeWiatr.innerHTML = res.list[16].wind.speed + " m/s";
 
             elementZa3Opis.innerHTML = res.list[23].weather[0].description; 
             wstawObrazek(res.list[23].weather[0].icon, "#obrazekZa3");
             ustawWiatr(res.list[23].wind.deg, "#wiatrZa3");
             elementZa3Temp.innerHTML = res.list[23].main.temp + " °C";
-            //elementPojutrzeZachmurzenie.innerHTML = res.prognoza.pojutrze.zachmurzenie + "%, ";
             elementZa3Wiatr.innerHTML = res.list[23].wind.speed + " m/s";
             
             
@@ -352,11 +368,11 @@
             elementGodzinowaO4.innerHTML = res.list[4].weather[0].description;
             elementGodzinowaO5.innerHTML = res.list[5].weather[0].description;
 
-            wstawWiatrGodzinowa(res.list[1].wind.speed, res.list[1].wind.deg, "#wiatro1", "#wiatri1");
-            /*wstawWiatrGodzinowa(res.list[2].wind.speed, res.list[2].wind.deg, ".pogodaGodzinowa .g2 #wiatro2", ".pogodaGodzinowa .g2 .wiatri2");
-            wstawWiatrGodzinowa(res.list[3].wind.speed, res.list[3].wind.deg, ".pogodaGodzinowa .g3 #wiatro3", ".pogodaGodzinowa .g3 #wiatri3");
-            wstawWiatrGodzinowa(res.list[4].wind.speed, res.list[4].wind.deg, ".pogodaGodzinowa .g4 #wiatro4", ".pogodaGodzinowa .g4 #wiatri4");
-            wstawWiatrGodzinowa(res.list[5].wind.speed, res.list[5].wind.deg, ".pogodaGodzinowa .g5 #wiatro5", ".pogodaGodzinowa .g5 #wiatri5");
+            elementGodzinowaW1.innerHTML = "wiatr: "+res.list[1].wind.speed+" m/s";
+            elementGodzinowaW2.innerHTML = "wiatr: "+res.list[2].wind.speed+" m/s";
+            elementGodzinowaW3.innerHTML = "wiatr: "+res.list[3].wind.speed+" m/s";
+            elementGodzinowaW4.innerHTML = "wiatr: "+res.list[4].wind.speed+" m/s";
+            elementGodzinowaW5.innerHTML = "wiatr: "+res.list[5].wind.speed+" m/s";
                   
             let adresAir = "http://api.openweathermap.org/data/2.5/air_pollution?lat="
                     +lat+"&lon="+lon+"&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
@@ -364,7 +380,8 @@
             .then(res => res.json())
             .then(res => { 
               console.log(res);
-                    })*/
+              elementTerazPowietrze.innerHTML = "PM10: " + res.list[0].components.pm10 + ", PM2.5: " + res.list[0].components.pm2_5;
+                    })
                 });
             });
 
