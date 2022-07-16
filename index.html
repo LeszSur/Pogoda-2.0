@@ -315,7 +315,7 @@
           }
           
     function getWeather(parLat, parLon){
-                let adresWeather = "http://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
+                let adresWeather = "https://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
                   "&lang=PL&units=metric&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
                 const czasPomiaru = new Date();
                 const godzinaPomiaru = czasPomiaru.getHours();
@@ -451,7 +451,7 @@
             elementGodzinowaW4.innerHTML = "wiatr: "+res.list[4].wind.speed+" m/s";
             elementGodzinowaW5.innerHTML = "wiatr: "+res.list[5].wind.speed+" m/s";
 
-            let adresAir = "http://api.openweathermap.org/data/2.5/air_pollution?lat="
+            let adresAir = "https://api.openweathermap.org/data/2.5/air_pollution?lat="
                     + parLat +"&lon=" + parLon + "&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
             fetch(adresAir)
             .then(res => res.json())
