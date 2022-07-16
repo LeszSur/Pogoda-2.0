@@ -9,12 +9,11 @@
 
 <body>
   <section id="wybor">
-    <canvas id="obrazek1" height="15"></canvas>
-    <canvas id="obrazek2" height="15"></canvas>
-    <p>Wybierz miasto:</p>
-    <select class="wpisyMiast"></select>
+    <canvas id="field1" height="15"></canvas>
+    <canvas id="field2" height="15"></canvas>
+    <p>Wpisz miasto:</p>
     <input id="szukaj"></input>
-    <button id="przycisk">Szukaj miast</button>
+    <button id="przycisk">Znajdź</button>
   </section>
 
   <section>
@@ -47,38 +46,38 @@
   <section>
   <div class="pogodaGodzinowa">
     <table>
-      <h3>Prognoza godzinowa (co 3 godziny):</h3>
+      <h3>Godzinowa:</h3>
       <tr>
         <td class="g1">
-          <p id="godz1"></p>
+          <strong><p id="godz1"></p></strong>
           <p id="temp1"></p>
           <p id="ico1"></p>
           <p id="opis1"></p> 
           <p id="wiatr1"></p>
         </td>
         <td class="g2">
-          <p id="godz2"></p>
+          <strong><p id="godz2"></p></strong>
           <p id="temp2"></p>
           <p id="ico2"></p>
           <p id="opis2"></p>
           <p id="wiatr2"></p>
         </td>
         <td class="g3">
-          <p id="godz3"></p>
+          <strong><p id="godz3"></p></strong>
           <p id="temp3"></p>
           <p id="ico3"></p>
           <p id="opis3"></p> 
           <p id="wiatr3"></p>
         </td>
         <td class="g4">
-          <p id="godz4"></p>
+          <strong><p id="godz4"></p></strong>
           <p id="temp4"></p>
           <p id="ico4"></p>
           <p id="opis4"></p> 
           <p id="wiatr4"></p>
         </td>
         <td class="g5">
-          <p id="godz5"></p>
+          <strong><p id="godz5"></p></strong>
           <p id="temp5"></p>
           <p id="ico5"></p>
           <p id="opis5"></p> 
@@ -88,10 +87,9 @@
     </table>
   </div>
   </section>
-
   <section>
     <div id="panel">
-      <h2>Prognoza na jutro</h2>
+      <h2>Jutro</h2>
       <canvas id="obrazekJutro" height="120"></canvas>
       <h2 id="opisJutro"></h2>
       <div class="pogodaJutro">
@@ -106,7 +104,7 @@
 
     </div>
     <div id="panel">
-      <h2>Prognoza na pojutrze</h2>
+      <h2>Pojutrze</h2>
       <canvas id="obrazekPojutrze" height="120"></canvas>
       <h2 id="opisPojutrze"></h2>
       <div class="pogodaPojutrze">
@@ -119,7 +117,7 @@
       </div>
     </div>
     <div id="panel">
-      <h2>Prognoza za trzy dni</h2>
+      <h2>Za trzy dni</h2>
       <canvas id="obrazekZa3" height="120"></canvas>
       <h2 id="opisZa3"></h2>
       <div class="pogodaZa3">
@@ -138,7 +136,11 @@
     <div id="containerMessages"></div>
   </div>
 
-  <script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+
+
+
     let elementTerazNaglowek = document.querySelector("#naglowek");
     let elementTerazOpis = document.querySelector("#opisAktualna");
     let elementTerazTemp = document.querySelector("#temp");
@@ -191,6 +193,8 @@
     let szukaj = "";
     let elementPrzycisk = document.querySelector("#przycisk");
     let loader = document.querySelector("#loader");
+
+
 
  
     function lista(wpisMiasta) {
@@ -293,29 +297,89 @@
       };
     };
 
-    function ustawWiatr(a, b) {
-
-      const obrot = 'rotate('+ a +'deg)';
-      document.querySelector(b).innerHTML = "<img src='img/wiatr.png' width=35>";
-      document.querySelector(b).style.transform = obrot;
+    function ustawWiatr(parRotate, parSelector) {
+      const obrot = 'rotate('+ parRotate +'deg)';
+      document.querySelector(parSelector).innerHTML = "<img src='img/wiatr.png' width=35>";
+      document.querySelector(parSelector).style.transform = obrot;
     } 
 
-    function pobierzMiasta(szukaj) {
-
-                
-      //let miasto = document.querySelector("#szukaj").value;
-            let adresPar = "https://api.geoapify.com/v1/geocode/search?text="+szukaj+"&apiKey=5c1152da60b54e39b1f6e5dac9596307";
-            fetch(adresPar)
+    function getCoordinates(parCity) {
+            let adresCoordinates = "https://api.geoapify.com/v1/geocode/search?text=" + parCity + "&apiKey=5c1152da60b54e39b1f6e5dac9596307";
+            fetch(adresCoordinates)
             .then(res => res.json())
             .then(res => { 
                 lon = parseFloat(res.features[0].geometry.coordinates[0]);
                 lat = parseFloat(res.features[0].geometry.coordinates[1]);
-                let adresWeather = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+
+                getWeather(lat, lon);
+            })
+          }
+          
+    function getWeather(parLat, parLon){
+                let adresWeather = "http://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
                   "&lang=PL&units=metric&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
+                const czasPomiaru = new Date();
+                const godzinaPomiaru = czasPomiaru.getHours();
+                console.log(godzinaPomiaru);
+                
+                let wybor;          
+                switch (godzinaPomiaru) {
+
+                  case 0 : wybor = 13;
+                  break;
+                  case 1 : wybor = 13;
+                  break;
+                  case 2 : wybor = 13;
+                  break; 
+                  case 3 : wybor = 12;
+                  break;
+                  case 4 : wybor = 12;
+                  break;
+                  case 5 : wybor = 12;
+                  break;
+                  case 6 : wybor = 11;
+                  break;
+                  case 7 : wybor = 11;
+                  break;
+                  case 8 : wybor = 10;
+                  break;
+                  case 9 : wybor = 10;
+                  break; 
+                  case 10 : wybor = 9;
+                  break; 
+                  case 11 : wybor = 9;
+                  break;
+                  case 12 : wybor = 9;
+                  break;
+                  case 13 : wybor = 8;
+                  break; 
+                  case 14 : wybor = 8;
+                  break;
+                  case 15 : wybor = 8;
+                  break;
+                  case 16 : wybor = 7;
+                  break;
+                  case 17 : wybor = 7;
+                  break;
+                  case 18 : wybor = 7;
+                  break;
+                  case 19 : wybor = 6;
+                  break;
+                  case 20 : wybor = 6;
+                  break;
+                  case 21 : wybor = 6;
+                  break;
+                  case 22 : wybor = 5;
+                  break;
+                  case 23 : wybor = 5;
+                  break;
+          
+                }
+                  console.log(wybor);
+
                   fetch(adresWeather)
                   .then(res => res.json())
                   .then(res => { 
-                    console.log(res);
+                  //  drawChart;
             elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.city.name + " " + res.city.country;
             elementTerazOpis.innerHTML = res.list[0].weather[0].description;
             wstawObrazek(res.list[0].weather[0].icon, "#obrazekAktualna");
@@ -325,36 +389,49 @@
             elementTerazCisnienie.innerHTML = res.list[0].main.pressure + " hPa";
             elementTerazWiatr.innerHTML = res.list[0].wind.speed + " m/s";
 
-            elementJutroOpis.innerHTML = res.list[8].weather[0].description;
-            wstawObrazek(res.list[8].weather[0].icon, "#obrazekJutro");
-            ustawWiatr(res.list[8].wind.deg, "#wiatrJutro");
-            elementJutroTemp.innerHTML = res.list[8].main.temp + " °C";
-            elementJutroWiatr.innerHTML = res.list[8].wind.speed + " m/s";
+            elementJutroOpis.innerHTML = res.list[wybor].weather[0].description;
+            wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro");
+            ustawWiatr(res.list[wybor].wind.deg, "#wiatrJutro");
+            elementJutroTemp.innerHTML = res.list[wybor].main.temp + " °C";
+            elementJutroWiatr.innerHTML = res.list[wybor].wind.speed + " m/s";
 
-            elementPojutrzeOpis.innerHTML = res.list[16].weather[0].description;
-            wstawObrazek(res.list[16].weather[0].icon, "#obrazekPojutrze");
-            ustawWiatr(res.list[16].wind.deg, "#wiatrPojutrze");
-            elementPojutrzeTemp.innerHTML = res.list[16].main.temp + " °C";
-            elementPojutrzeWiatr.innerHTML = res.list[16].wind.speed + " m/s";
+            elementPojutrzeOpis.innerHTML = res.list[wybor+8].weather[0].description;
+            wstawObrazek(res.list[wybor+8].weather[0].icon, "#obrazekPojutrze");
+            ustawWiatr(res.list[wybor+8].wind.deg, "#wiatrPojutrze");
+            elementPojutrzeTemp.innerHTML = res.list[wybor+8].main.temp + " °C";
+            elementPojutrzeWiatr.innerHTML = res.list[wybor+8].wind.speed + " m/s";
 
-            elementZa3Opis.innerHTML = res.list[23].weather[0].description; 
-            wstawObrazek(res.list[23].weather[0].icon, "#obrazekZa3");
-            ustawWiatr(res.list[23].wind.deg, "#wiatrZa3");
-            elementZa3Temp.innerHTML = res.list[23].main.temp + " °C";
-            elementZa3Wiatr.innerHTML = res.list[23].wind.speed + " m/s";
+            elementZa3Opis.innerHTML = res.list[wybor+16].weather[0].description; 
+            wstawObrazek(res.list[wybor+16].weather[0].icon, "#obrazekZa3");
+            ustawWiatr(res.list[wybor+16].wind.deg, "#wiatrZa3");
+            elementZa3Temp.innerHTML = res.list[wybor+16].main.temp + " °C";
+            elementZa3Wiatr.innerHTML = res.list[wybor+16].wind.speed + " m/s";
             
-            
-            elementGodzinowa1.innerHTML = res.list[1].dt_txt;
-            elementGodzinowa2.innerHTML = res.list[2].dt_txt;
-            elementGodzinowa3.innerHTML = res.list[3].dt_txt;
-            elementGodzinowa4.innerHTML = res.list[4].dt_txt;
-            elementGodzinowa5.innerHTML = res.list[5].dt_txt;
+            //elementGodzinowa1.innerHTML = res.list[1].dt_txt(str.substr(12, 16));
 
-            elementGodzinowaT1.innerHTML = res.list[1].main.temp + " °C";
-            elementGodzinowaT2.innerHTML = res.list[2].main.temp + " °C";
-            elementGodzinowaT3.innerHTML = res.list[3].main.temp + " °C";
-            elementGodzinowaT4.innerHTML = res.list[4].main.temp + " °C";
-            elementGodzinowaT5.innerHTML = res.list[5].main.temp + " °C";
+            function Text (ParText) {
+              let String;
+              let ShortString;
+              let TextString;
+              String = (res.list[ParText].dt_txt);
+              ShortString = (String.slice(11, 16));
+              TextString = ShortString.toString();
+
+              return TextString;
+            }
+
+
+            elementGodzinowa1.innerHTML = Text(1);
+            elementGodzinowa2.innerHTML = Text(2);
+            elementGodzinowa3.innerHTML = Text(3);
+            elementGodzinowa4.innerHTML = Text(4);
+            elementGodzinowa5.innerHTML = Text(5);
+
+            elementGodzinowaT1.innerHTML = "Temperatura: " + res.list[1].main.temp + " °C ";
+            elementGodzinowaT2.innerHTML = "Temperatura: " + res.list[2].main.temp + " °C ";
+            elementGodzinowaT3.innerHTML = "Temperatura: " + res.list[3].main.temp + " °C ";
+            elementGodzinowaT4.innerHTML = "Temperatura: " + res.list[4].main.temp + " °C ";
+            elementGodzinowaT5.innerHTML = "Temperatura: " + res.list[5].main.temp + " °C ";
 
             wstawObrazekGodzinowa(res.list[1].weather[0].icon, ".pogodaGodzinowa .g1 #ico1");
             wstawObrazekGodzinowa(res.list[2].weather[0].icon, ".pogodaGodzinowa .g2 #ico2");
@@ -373,119 +450,76 @@
             elementGodzinowaW3.innerHTML = "wiatr: "+res.list[3].wind.speed+" m/s";
             elementGodzinowaW4.innerHTML = "wiatr: "+res.list[4].wind.speed+" m/s";
             elementGodzinowaW5.innerHTML = "wiatr: "+res.list[5].wind.speed+" m/s";
-                  
+
             let adresAir = "http://api.openweathermap.org/data/2.5/air_pollution?lat="
-                    +lat+"&lon="+lon+"&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
+                    + parLat +"&lon=" + parLon + "&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
             fetch(adresAir)
             .then(res => res.json())
             .then(res => { 
               console.log(res);
               elementTerazPowietrze.innerHTML = "PM10: " + res.list[0].components.pm10 + ", PM2.5: " + res.list[0].components.pm2_5;
                     })
-                });
-            });
+                  })
+                };
+/*
+
+  <div id="chart_div" style="width: 100%; height: 500px;"></div>
 
 
-      /*let adres = "https://weather-api-alpha.herokuapp.com/pogoda/miasta?szukaj=" + szukaj;
-      console.log(adres);
-      fetch(adres)
-        .then(res => res.json())
-        .then(res => {
+google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(drawChart);
 
-          loader.classList.add("visible");
+        function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Date', '°C'],
+        [Godzinowa1,  res.list[1].main.temp],
+        [Godzinowa2,  res.list[2].main.temp],
+        [Godzinowa3,  res.list[3].main.temp],
+        [Godzinowa4,  res.list[4].main.temp],
+        [Godzinowa5,  res.list[5].main.temp],
+      ]);
 
-          setTimeout(() => {
+      var options = {
+        annotations: {
+    textStyle: {
+      fontName: 'Times-Roman',
+      fontSize: 18,
+      bold: true,
+      italic: true,
+      // The color of the text.
+      color: '#871b47',
+      // The color of the text outline.
+      auraColor: '#d799ae',
+      // The transparency of the text.
+      opacity: 0.8
+    }
+  },
+        title: '',
+        hAxis: {title: 'Temperatura',  titleTextStyle: {color: '#333'}},
+        vAxis: {minValue: 0}
+      };
 
-            loader.classList.remove("visible");
-          
-  
-          for (i = 0; i < res.length; i++) {
-            miasta.push(res[i].nazwa);
-            lista(miasta[miasta.length - 1]);
-          };
-           pobierzPogode(document.querySelector(".wpisyMiast").value);
-          }, 500);
-
-        })
-        .catch(error => document.querySelector("#opisAktualna").innerHTML = "błąd wczytywania danych")*/
-    };
-
-    function pobierzPogode(miasto) {
-
-      document.querySelector("#containerMessages").innerHTML = "";        
-      let adres = "https://weather-api-alpha.herokuapp.com/pogoda/prognoza?miasto=" + miasto;
-      console.log(adres);
-      fetch(adres)
-      .then(res => res.json())
-      .then(res => {
-
-          loader.classList.add("visible");
-
-          setTimeout(() => {
-
-            loader.classList.remove("visible");
-
-            elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + miasto;
-            elementTerazOpis.innerHTML = res.teraz.opis;
-            wstawObrazek(res.teraz.ikonka, "#obrazekAktualna");
-            ustawWiatr(res.teraz.wiatrKierunek, "#wiatrAktualna");
-            elementTerazTemp.innerHTML = res.teraz.temperatura + " °C";
-            elementTerazZachmurzenie.innerHTML = res.teraz.zachmurzenie + "%, ";
-            elementTerazWiatr.innerHTML = res.teraz.wiatrKierunekSłownie + ", prędkość: " + res.teraz.wiatrPrędkość + " m/s";
-
-            elementDzisiajOpis.innerHTML = res.prognoza.dziś.opis;
-            wstawObrazek(res.prognoza.dziś.ikonka, "#obrazekDzisiaj");
-            ustawWiatr(res.prognoza.dziś.wiatrKierunek, "#wiatrDzisiaj");
-            elementDzisiajTemp.innerHTML = res.prognoza.dziś.temperatura + " °C";
-            elementDzisiajZachmurzenie.innerHTML = res.prognoza.dziś.zachmurzenie + "%, ";
-            elementDzisiajWiatr.innerHTML = res.prognoza.dziś.wiatrKierunekSłownie + ", prędkość: " + res.prognoza.dziś.wiatrPrędkość + " m/s";
-
-            elementJutroOpis.innerHTML = res.prognoza.jutro.opis;
-            wstawObrazek(res.prognoza.jutro.ikonka, "#obrazekJutro");
-            ustawWiatr(res.prognoza.jutro.wiatrKierunek, "#wiatrJutro");
-            elementJutroTemp.innerHTML = res.prognoza.jutro.temperatura + " °C";
-            elementJutroZachmurzenie.innerHTML = res.prognoza.jutro.zachmurzenie + "%, ";
-            elementJutroWiatr.innerHTML = res.prognoza.jutro.wiatrKierunekSłownie + ", prędkość: " + res.prognoza.jutro.wiatrPrędkość + " m/s";
-
-            elementPojutrzeOpis.innerHTML = res.prognoza.pojutrze.opis;
-            wstawObrazek(res.prognoza.pojutrze.ikonka, "#obrazekPojutrze");
-            ustawWiatr(res.prognoza.pojutrze.wiatrKierunek, "#wiatrPojutrze");
-            elementPojutrzeTemp.innerHTML = res.prognoza.pojutrze.temperatura + " °C";
-            elementPojutrzeZachmurzenie.innerHTML = res.prognoza.pojutrze.zachmurzenie + "%, ";
-            elementPojutrzeWiatr.innerHTML = res.prognoza.pojutrze.wiatrKierunekSłownie + ", prędkość: " + res.prognoza.jutro.wiatrPrędkość + " m/s";
+      var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    } */
 
 
-            document.querySelector("#containerMessages").innerHTML = "zakończono wczytywanie danych@żródło:herokuapp.com.Hubert.Zub";
-            document.querySelector("#containerMessages").style.color = "blue";
 
-           }, 500);
-        })
-          .catch(error => document.querySelector("#opisAktualna").innerHTML = "błąd wczytywania danych")
-        
-    };
 
-    /*window.addEventListener("load", () => {
+    window.addEventListener("load", () => {
       
-      pobierzMiasta("");
-
-      document.querySelector(".wpisyMiast").addEventListener("change", (wybor) => {
-        let mojWybor = wybor.target.value;
-        pobierzPogode(mojWybor);
-      });*/
-
-      document.querySelector("#przycisk").addEventListener("click", () => {
-        miasta.length = 0;
-        let option = document.querySelector(".wpisyMiast"), child;
-        while ((child = option.firstChild)) {
-          option.removeChild(child);
-        };
-        let mojeParametry = document.querySelector("#szukaj").value;
-        pobierzMiasta(mojeParametry);
+      navigator.geolocation.getCurrentPosition((position) => {
+        let lon = position.coords.longitude;
+        let lat = position.coords.latitude;
+        getWeather(lat, lon);  
+        });
       });
 
-    //});
-
-    
+    document.querySelector("#przycisk").addEventListener("click", () => {
+        let parCity = document.querySelector("#szukaj").value;
+        getCoordinates(parCity);
+      });
+  
   </script>
 </body>
 
