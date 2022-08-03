@@ -3,6 +3,9 @@
 
 <head>
   <meta charset="UTF-8" />
+  <script src="node_modules/chart.js/dist/chart.min.js"></script>
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  
   <link rel="stylesheet" href="style.css">
   <title>Pogodynka</title>
 </head>
@@ -87,6 +90,11 @@
     </table>
   </div>
   </section>
+  <section>
+  <div class="chart-cnt">
+    <canvas id="myChart" width="1000" height="200"></canvas>
+  </div>
+</section>
   <section>
     <div id="panel">
       <h2>Jutro</h2>
@@ -315,11 +323,10 @@
           }
           
     function getWeather(parLat, parLon){
-                let adresWeather = "http://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
+                let adresWeather = "https://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
                   "&lang=PL&units=metric&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
                 const czasPomiaru = new Date();
                 const godzinaPomiaru = czasPomiaru.getHours();
-                console.log(godzinaPomiaru);
                 
                 let wybor;          
                 switch (godzinaPomiaru) {
@@ -374,7 +381,6 @@
                   break;
           
                 }
-                  console.log(wybor);
 
                   fetch(adresWeather)
                   .then(res => res.json())
@@ -451,12 +457,11 @@
             elementGodzinowaW4.innerHTML = "wiatr: "+res.list[4].wind.speed+" m/s";
             elementGodzinowaW5.innerHTML = "wiatr: "+res.list[5].wind.speed+" m/s";
 
-            let adresAir = "http://api.openweathermap.org/data/2.5/air_pollution?lat="
+            let adresAir = "https://api.openweathermap.org/data/2.5/air_pollution?lat="
                     + parLat +"&lon=" + parLon + "&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
             fetch(adresAir)
             .then(res => res.json())
             .then(res => { 
-              console.log(res);
               elementTerazPowietrze.innerHTML = "PM10: " + res.list[0].components.pm10 + ", PM2.5: " + res.list[0].components.pm2_5;
                     })
                   })
@@ -503,7 +508,45 @@ google.charts.load('current', {'packages':['corechart']});
       chart.draw(data, options);
     } */
 
+    let data = {
+    labels: ["coś1", "February", "March", "April", "coś"],
+    datasets: [
+        {
+            label: "My First dataset",
+            //linia
+            borderDash: [3, 3], //jezeli ustawione to przerywana linia
+            borderColor : 'rgba(236,115,87, 0.7)',
+            pointBorderColor : 'rgba(236,115,87, 0.7)',
+            borderWidth : 2,
+            //kolor tla i legendy
+            fill: true, //czy wypelnic zbior
+            backgroundColor : 'rgba(236,115,87, 0.1)', //wplywa tez na kolor w legendzie
+            //ustawienia punktu
+            pointRadius : 4,
+            pointBorderWidth : 1,
+            pointBackgroundColor : 'rgba(255,255,255,1)',
+            //ustawienia punktu hover
+            pointHoverRadius: 6,
+            pointHoverBorderWidth: 3,
+            pointHoverBackgroundColor : 'rgba(255,255,255,1)',
+            pointHoverBorderColor : 'rgba(236,115,87, 1)',
+            data: [5, 30, 40, 30, 32],
+        }
+        
+    ]
+};
 
+let options = {
+};
+
+let canvasDraw = document.querySelector("#myChart");
+let ctxDraw = canvasDraw.getContext("2d");
+
+let myLineChart = new Chart(ctxDraw, {
+    type: 'line',
+    data: data,
+    options: options
+});
 
 
     window.addEventListener("load", () => {
