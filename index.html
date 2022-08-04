@@ -46,58 +46,17 @@
     </div>
   </section>
 
-  <section>
-  <div class="pogodaGodzinowa">
-    <table>
-      <h3>Godzinowa:</h3>
-      <tr>
-        <td class="g1">
-          <strong><p id="godz1"></p></strong>
-          <h3><strong><p id="temp1"></p></strong></h3>
-          <p id="ico1"></p>
-          <p id="opis1"></p> 
-          <p id="wiatr1"></p>
-        </td>
-        <td class="g2">
-          <strong><p id="godz2"></p></strong>
-          <h3><strong><p id="temp2"></p></strong></h3>
-          <p id="ico2"></p>
-          <p id="opis2"></p>
-          <p id="wiatr2"></p>
-        </td>
-        <td class="g3">
-          <strong><p id="godz3"></p></strong>
-          <h3><strong><p id="temp3"></p></strong></h3>
-          <p id="ico3"></p>
-          <p id="opis3"></p> 
-          <p id="wiatr3"></p>
-        </td>
-        <td class="g4">
-          <strong><p id="godz4"></p></strong>
-          <h3><strong><p id="temp4"></p></strong></h3>
-          <p id="ico4"></p>
-          <p id="opis4"></p> 
-          <p id="wiatr4"></p>
-        </td>
-        <td class="g5">
-          <strong><p id="godz5"></p></strong>
-          <h3><strong><p id="temp5"></p></strong></h3>
-          <p id="ico5"></p>
-          <p id="opis5"></p> 
-          <p id="wiatr5"></p>
-        </td>
-      </tr>
-    </table>
-  </div>
-  </section>
+  <h3>Prognoza godzinowa:</h3>
   <section>
   <div class="chart-cnt">
-    <canvas id="myChart" width="1000" height="200"></canvas>
+    <canvas id="myChart" width="1040" height="200"></canvas>
+    <canvas id="ico" width="1040" height="60"></canvas>
   </div>
 </section>
+<h3>Prognoza na najbliższe 3 dni:</h3>
   <section>
     <div id="panel">
-      <h2>Jutro</h2>
+      <h2 id="jutro"></h2>
       <canvas id="obrazekJutro" height="120"></canvas>
       <h2 id="opisJutro"></h2>
       <div class="pogodaJutro">
@@ -112,7 +71,7 @@
 
     </div>
     <div id="panel">
-      <h2>Pojutrze</h2>
+      <h2 id="pojutrze"></h2>
       <canvas id="obrazekPojutrze" height="120"></canvas>
       <h2 id="opisPojutrze"></h2>
       <div class="pogodaPojutrze">
@@ -125,7 +84,7 @@
       </div>
     </div>
     <div id="panel">
-      <h2>Za trzy dni</h2>
+      <h2 id="zaTrzy"></h2>
       <canvas id="obrazekZa3" height="120"></canvas>
       <h2 id="opisZa3"></h2>
       <div class="pogodaZa3">
@@ -201,7 +160,31 @@
     let szukaj = "";
     let elementPrzycisk = document.querySelector("#przycisk");
     let loader = document.querySelector("#loader");
+    let myLineChart;
 
+    wstawDzień("#Jutro", 1);
+    wstawDzień("#Pojutrze", 2);
+    wstawDzień("#zaTRzy", 3);
+
+    function wstawDzień (a, b){
+      let today = getDay();
+      switch (today + b) {
+        case "0": document.querySelector(a).innerHTML = "poniedziałek";
+          break;
+        case "1": document.querySelector(a).innerHTML = "wtorek";
+          break;
+        case "2": document.querySelector(a).innerHTML = "środa";
+          break;
+        case "3": document.querySelector(b).innerHTML = "czwartek";
+          break;
+        case "4": document.querySelector(b).innerHTML = "piątek";
+          break;
+        case "5": document.querySelector(b).innerHTML = "sobota";
+          break;
+        case "6": document.querySelector(b).innerHTML = "niedziela";
+          break;
+    };
+  };
 
 
  
@@ -254,7 +237,57 @@
       };
     }
 
-    
+    function wstawObrazekGodz(a, b, c) {
+
+const canvas = document.querySelector(b);
+const ctx = canvas.getContext("2d");
+const image = new Image();
+
+image.addEventListener("load", e => {
+  ctx.clearRect(c, 0, 50, 50);
+  ctx.drawImage(image, c, 0, 50, 50);
+});
+switch (a) {
+  case "01d": image.src = "img/slonce.png";
+    break;
+  case "01n": image.src = "img/slonce.png";
+    break;
+  case "02d": image.src = "img/chmury1.png";
+    break;
+  case "02n": image.src = "img/chmury1.png";
+    break;
+  case "03d": image.src = "img/chmury2.png";
+    break;
+  case "03n": image.src = "img/chmury2.png";
+    break;
+  case "04d": image.src = "img/chmury3.png";
+    break;
+  case "04n": image.src = "img/chmury3.png";
+    break;
+  case "09d": image.src = "img/deszcz2.png";
+    break;
+  case "09n": image.src = "img/deszcz2.png";
+    break;
+  case "10d": image.src = "img/deszcz1.png";
+    break;
+  case "10n": image.src = "img/deszcz1.png";
+    break;
+  case "11d": image.src = "img/burza.png";
+    break;
+  case "11n": image.src = "img/burza.png";
+    break;  
+  case "13d": image.src = "img/snieg.png";
+    break;
+  case "13n": image.src = "img/snieg.png";
+    break;
+  case "50d": image.src = "img/mgla.png";
+    break;
+  case "50n": image.src = "img/mgla.png";
+    break;
+};
+};
+
+
     function wstawObrazek(a, b) {
 
       const canvas = document.querySelector(b);
@@ -415,19 +448,32 @@
             
             //elementGodzinowa1.innerHTML = res.list[1].dt_txt(str.substr(12, 16));
 
-            function Text (ParText) {
+
+
+            function Text (parText) {
               let String;
               let ShortString;
+              let Temp;
               let TextString;
-              String = (res.list[ParText].dt_txt);
+              String = (res.list[parText].dt_txt);
               ShortString = (String.slice(11, 16));
-              TextString = ShortString.toString();
+              Temp = ShortString + " - " + res.list[parText].main.temp + " °C ";
+              TextString = Temp.toString();
 
-              return TextString;
-            }
+              return TextString;  
+            };
+
+            function Temp (parTemp) {
+              let String;
+              let TextString;
+              String = (res.list[parTemp].main.temp);
+              TextString = String.toString();
+
+              return TextString;  
+            };
 
 
-            elementGodzinowa1.innerHTML = Text(1);
+            /*elementGodzinowa1.innerHTML = Text(1);
             elementGodzinowa2.innerHTML = Text(2);
             elementGodzinowa3.innerHTML = Text(3);
             elementGodzinowa4.innerHTML = Text(4);
@@ -439,13 +485,19 @@
             elementGodzinowaT4.innerHTML = res.list[4].main.temp + " °C ";
             elementGodzinowaT5.innerHTML = res.list[5].main.temp + " °C ";
 
-            wstawObrazekGodzinowa(res.list[1].weather[0].icon, ".pogodaGodzinowa .g1 #ico1");
+            wstawObrazekGodzinowa(res.list[1].weather[0].icon, "#ico1");
             wstawObrazekGodzinowa(res.list[2].weather[0].icon, ".pogodaGodzinowa .g2 #ico2");
             wstawObrazekGodzinowa(res.list[3].weather[0].icon, ".pogodaGodzinowa .g3 #ico3");
             wstawObrazekGodzinowa(res.list[4].weather[0].icon, ".pogodaGodzinowa .g4 #ico4");
-            wstawObrazekGodzinowa(res.list[5].weather[0].icon, ".pogodaGodzinowa .g5 #ico5");
+            wstawObrazekGodzinowa(res.list[5].weather[0].icon, ".pogodaGodzinowa .g5 #ico5"); */
 
-            elementGodzinowaO1.innerHTML = res.list[1].weather[0].description;
+            wstawObrazekGodz(res.list[1].weather[0].icon, "#ico", 55);
+            wstawObrazekGodz(res.list[2].weather[0].icon, "#ico", 280);
+            wstawObrazekGodz(res.list[3].weather[0].icon, "#ico", 516);
+            wstawObrazekGodz(res.list[4].weather[0].icon, "#ico", 740);
+            wstawObrazekGodz(res.list[5].weather[0].icon, "#ico", 960);
+
+            /*elementGodzinowaO1.innerHTML = res.list[1].weather[0].description;
             elementGodzinowaO2.innerHTML = res.list[2].weather[0].description;
             elementGodzinowaO3.innerHTML = res.list[3].weather[0].description;
             elementGodzinowaO4.innerHTML = res.list[4].weather[0].description;
@@ -455,7 +507,72 @@
             elementGodzinowaW2.innerHTML = "wiatr: "+res.list[2].wind.speed+" m/s";
             elementGodzinowaW3.innerHTML = "wiatr: "+res.list[3].wind.speed+" m/s";
             elementGodzinowaW4.innerHTML = "wiatr: "+res.list[4].wind.speed+" m/s";
-            elementGodzinowaW5.innerHTML = "wiatr: "+res.list[5].wind.speed+" m/s";
+            elementGodzinowaW5.innerHTML = "wiatr: "+res.list[5].wind.speed+" m/s"; */
+
+
+  
+    let data = {
+    labels: [],
+    datasets: [
+        {
+            label: "",
+            //linia
+            borderDash: [3, 3], //jezeli ustawione to przerywana linia
+            borderColor : 'rgba(236,115,87, 0.7)',
+            pointBorderColor : 'rgba(236,115,87, 0.7)',
+            borderWidth : 2,
+            //kolor tla i legendy
+            fill: true, //czy wypelnic zbior
+            backgroundColor : 'rgba(236,115,87, 0.1)', //wplywa tez na kolor w legendzie
+            //ustawienia punktu
+            pointRadius : 4,
+            pointBorderWidth : 1,
+            pointBackgroundColor : 'rgba(255,255,255,1)',
+            //ustawienia punktu hover
+            pointHoverRadius: 6,
+            pointHoverBorderWidth: 3,
+            pointHoverBackgroundColor : 'rgba(255,255,255,1)',
+            pointHoverBorderColor : 'rgba(236,115,87, 1)',
+            data: [],
+        }
+        
+    ]
+};
+
+
+
+let options = {
+  plugins:{
+    legend:{
+      labels:{
+        generateLabels: "",
+        font:{
+          size: 36
+        }
+      }
+    }
+  }
+};
+
+data.labels = [Text(1), Text(2), Text(3), Text(4), Text(5)];
+data.datasets[0].data = [Temp(1), Temp(2), Temp(3), Temp(4), Temp(5)];
+
+console.log(data.labels);
+console.log(data.datasets[0].data);
+
+Chart.defaults.font.size = 16;
+
+let canvasDraw = document.querySelector("#myChart");
+
+let ctxDraw = canvasDraw.getContext("2d");
+
+    myLineChart = new Chart(ctxDraw, {
+    type: 'line',
+    data: data,
+    options: options
+});
+
+
 
             let adresAir = "https://api.openweathermap.org/data/2.5/air_pollution?lat="
                     + parLat +"&lon=" + parLon + "&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
@@ -508,45 +625,7 @@ google.charts.load('current', {'packages':['corechart']});
       chart.draw(data, options);
     } */
 
-    let data = {
-    labels: ["coś1", "February", "March", "April", "coś"],
-    datasets: [
-        {
-            label: "My First dataset",
-            //linia
-            borderDash: [3, 3], //jezeli ustawione to przerywana linia
-            borderColor : 'rgba(236,115,87, 0.7)',
-            pointBorderColor : 'rgba(236,115,87, 0.7)',
-            borderWidth : 2,
-            //kolor tla i legendy
-            fill: true, //czy wypelnic zbior
-            backgroundColor : 'rgba(236,115,87, 0.1)', //wplywa tez na kolor w legendzie
-            //ustawienia punktu
-            pointRadius : 4,
-            pointBorderWidth : 1,
-            pointBackgroundColor : 'rgba(255,255,255,1)',
-            //ustawienia punktu hover
-            pointHoverRadius: 6,
-            pointHoverBorderWidth: 3,
-            pointHoverBackgroundColor : 'rgba(255,255,255,1)',
-            pointHoverBorderColor : 'rgba(236,115,87, 1)',
-            data: [5, 30, 40, 30, 32],
-        }
-        
-    ]
-};
 
-let options = {
-};
-
-let canvasDraw = document.querySelector("#myChart");
-let ctxDraw = canvasDraw.getContext("2d");
-
-let myLineChart = new Chart(ctxDraw, {
-    type: 'line',
-    data: data,
-    options: options
-});
 
 
     window.addEventListener("load", () => {
@@ -559,6 +638,7 @@ let myLineChart = new Chart(ctxDraw, {
       });
 
     document.querySelector("#przycisk").addEventListener("click", () => {
+        myLineChart.destroy();
         let parCity = document.querySelector("#szukaj").value;
         getCoordinates(parCity);
       });
