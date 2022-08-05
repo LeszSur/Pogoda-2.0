@@ -15,7 +15,9 @@
     <canvas id="field1" height="15"></canvas>
     <canvas id="field2" height="15"></canvas>
     <p>Wpisz miasto:</p>
+    
     <input id="szukaj"></input>
+    <select id="wpisyMiast"></select>
     <button id="przycisk">Znajdź</button>
   </section>
 
@@ -159,7 +161,7 @@
     let nowyWpisMiasta = document.querySelector(".wpisyMiast");
     let szukaj = "";
     let elementPrzycisk = document.querySelector("#przycisk");
-    let loader = document.querySelector("#loader");
+    //let loader = document.querySelector("#loader");
     let myLineChart;
 
     const czasPomiaru = new Date();
@@ -202,7 +204,7 @@
       let nowyWpisMiasta = document.createElement("option");
       nowyWpisMiasta.value = wpisMiasta;
       nowyWpisMiasta.innerHTML = wpisMiasta;
-      document.querySelector(".wpisyMiast").appendChild(nowyWpisMiasta);
+      document.querySelector("#wpisyMiast").appendChild(nowyWpisMiasta);
     };
 
 
@@ -336,6 +338,12 @@
                   fetch(adresWeather)
                   .then(res => res.json())
                   .then(res => { 
+                         
+                  
+                  miasta.push(res.city.name);
+                  localStorage.setItem("miasta", miasta);
+                  console.log(miasta);
+
 
 
             elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.city.name + " " + res.city.country;
@@ -454,7 +462,6 @@ let ctxDraw = canvasDraw.getContext("2d");
             fetch(adresAir)
             .then(res => res.json())
             .then(res => { 
-              console.log(res);
               if ((res.list[0].components.pm10 >= 180) || (res.list[0].components.pm2_5 >= 110) || (res.list[0].components.no2 >= 400) || (res.list[0].components.o3 >= 240)) {elementTerazPowietrze.innerHTML = "bardzo złe"}
               else if ((180 > res.list[0].components.pm10 > 90.1) || (110 > res.list[0].components.pm2_5 > 55.1) || (400 > res.list[0].components.no2 > 200.1) || (240 >res.list[0].components.o3 > 180.1)) {elementTerazPowietrze.innerHTML = "złe"}
               else if ((90 > res.list[0].components.pm10 > 50.1) || (55 > res.list[0].components.pm2_5 > 30.1) || (200 > res.list[0].components.no2 > 100.1) || (180 >res.list[0].components.o3 > 120.1)) {elementTerazPowietrze.innerHTML = "umiarkowane"}
@@ -465,21 +472,44 @@ let ctxDraw = canvasDraw.getContext("2d");
                 };
 
 
-    window.addEventListener("load", () => {
+      window.addEventListener("load", () => {
       
       navigator.geolocation.getCurrentPosition((position) => {
         let lon = position.coords.longitude;
         let lat = position.coords.latitude;
-        getWeather(lat, lon);  
-        });
+        getWeather(lat, lon);
+      });
+        let getStorage_miasta = localStorage.getItem("miasta");
+                if (getStorage_miasta === null) {
+                    return;}
+                else {
+            getStorage_miasta = localStorage.getItem("miasta");       
+                for (i=0; i < getStorage_miasta.length; i++) {
+                     miasta.push(getStorage_miasta[i]);
+                     console.log(miasta);}
+                     /*
+                     let nowyWpisMiasta = document.createElement("option");
+                     nowyWpisMiasta.value = getStorage_miasta;
+                     nowyWpisMiasta.innerHTML = getStorage_miasta;
+                     document.querySelector("#wpisyMiast").appendChild(nowyWpisMiasta);}*/
+            };  
+        
+    });
+
+      document.querySelector("#wpisyMiast").addEventListener("change", (wybor) => {
+        let mojWybor = wybor.target.value;
+        myLineChart.destroy();
+        getCoordinates(mojWybor);
       });
 
       document.querySelector("#przycisk").addEventListener("click", () => {
         myLineChart.destroy();
         let parCity = document.querySelector("#szukaj").value;
         getCoordinates(parCity);
+        lista(parCity);
       });
-  
+
+        
     </script>
 </body>
 
