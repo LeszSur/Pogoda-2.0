@@ -42,7 +42,7 @@
       <h1 id="temp"></h1>
     </div>
     <div>
-      <canvas id="obrazekAktualna" height="120" width="300"></canvas>
+      <canvas id="obrazekAktualna" height="140" width="300"></canvas>
     </div>
   </section>
 
@@ -162,26 +162,38 @@
     let loader = document.querySelector("#loader");
     let myLineChart;
 
-    wstawDzień("#Jutro", 1);
-    wstawDzień("#Pojutrze", 2);
-    wstawDzień("#zaTRzy", 3);
+    const czasPomiaru = new Date();
+    const dzienPomiaru = czasPomiaru.getDay();
+    const godzinaPomiaru = czasPomiaru.getHours();
+    
+    wstawDzień("#jutro", dzienPomiaru, 1);
+    wstawDzień("#pojutrze", dzienPomiaru, 2);
+    wstawDzień("#zaTrzy", dzienPomiaru, 3);
 
-    function wstawDzień (a, b){
-      let today = getDay();
-      switch (today + b) {
-        case "0": document.querySelector(a).innerHTML = "poniedziałek";
+
+
+    function wstawDzień (a, b, c){
+
+      const dzienWstaw = (b + c);
+
+      switch (dzienWstaw) {
+        case 1: document.querySelector(a).innerHTML = "poniedziałek";
           break;
-        case "1": document.querySelector(a).innerHTML = "wtorek";
+        case 2: document.querySelector(a).innerHTML = "wtorek";
           break;
-        case "2": document.querySelector(a).innerHTML = "środa";
+        case 3: document.querySelector(a).innerHTML = "środa";
           break;
-        case "3": document.querySelector(b).innerHTML = "czwartek";
+        case 4: document.querySelector(a).innerHTML = "czwartek";
           break;
-        case "4": document.querySelector(b).innerHTML = "piątek";
+        case 5: document.querySelector(a).innerHTML = "piątek";
           break;
-        case "5": document.querySelector(b).innerHTML = "sobota";
+        case 6: document.querySelector(a).innerHTML = "sobota";
           break;
-        case "6": document.querySelector(b).innerHTML = "niedziela";
+        case 7: document.querySelector(a).innerHTML = "niedziela";
+          break;
+        case 8: document.querySelector(a).innerHTML = "poniedziałek";
+          break;
+        case 9: document.querySelector(a).innerHTML = "wtorek";
           break;
     };
   };
@@ -195,47 +207,6 @@
       document.querySelector(".wpisyMiast").appendChild(nowyWpisMiasta);
     };
 
-    function wstawObrazekGodzinowa(a, b){
-      
-          switch (a) {
-        case "01d": document.querySelector(b).innerHTML = "<img src='img/slonce.png' width=50>";
-          break;
-        case "01n": document.querySelector(b).innerHTML = "<img src='img/slonce.png' width=50>";
-          break;
-        case "02d": document.querySelector(b).innerHTML = "<img src='img/chmury1.png' width=50>";
-          break;
-        case "02n": document.querySelector(b).innerHTML = "<img src='img/chmury1.png' width=50>";
-          break;
-        case "03d": document.querySelector(b).innerHTML = "<img src='img/chmury2.png' width=50>";
-          break;
-        case "03n": document.querySelector(b).innerHTML = "<img src='img/chmury2.png' width=50>";
-          break;
-        case "04d": document.querySelector(b).innerHTML = "<img src='img/chmury3.png' width=50>";
-          break;
-        case "04n": document.querySelector(b).innerHTML = "<img src='img/chmury3.png' width=50>";
-          break;
-        case "09d": document.querySelector(b).innerHTML = "<img src='img/deszcz2.png' width=50>";
-          break;
-        case "09n": document.querySelector(b).innerHTML = "<img src='img/deszcz2.png' width=50>";
-          break;
-        case "10d": document.querySelector(b).innerHTML = "<img src='img/deszcz1.png' width=50>";
-          break;
-        case "10n": document.querySelector(b).innerHTML = "<img src='img/deszcz1.png' width=50>";
-          break;
-        case "11d": document.querySelector(b).innerHTML = "<img src='img/burza.png' width=50>";
-          break;
-        case "11n": document.querySelector(b).innerHTML = "<img src='img/burza.png' width=50>";
-          break;  
-        case "13d": document.querySelector(b).innerHTML = "<img src='img/snieg.png' width=50>";
-          break;
-        case "13n": document.querySelector(b).innerHTML = "<img src='img/snieg.png' width=50>";
-          break;
-        case "50d": document.querySelector(b).innerHTML = "<img src='img/mgla.png' width=50>";
-          break;
-        case "50n": document.querySelector(b).innerHTML = "<img src='img/mgla.png' width=50>";
-          break;           
-      };
-    }
 
     function wstawObrazekGodz(a, b, c) {
 
@@ -288,15 +259,15 @@ switch (a) {
 };
 
 
-    function wstawObrazek(a, b) {
+    function wstawObrazek(a, b, c) {
 
       const canvas = document.querySelector(b);
       const ctx = canvas.getContext("2d");
       const image = new Image();
 
       image.addEventListener("load", e => {
-        ctx.clearRect(0, 0, ctx.canvas.width - 200, ctx.canvas.height - 20);
-        ctx.drawImage(image, 0, 0, canvas.width - 200, canvas.height - 20);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.drawImage(image, 0, 0, c, c);
       });
       switch (a) {
         case "01d": image.src = "img/slonce.png";
@@ -358,8 +329,7 @@ switch (a) {
     function getWeather(parLat, parLon){
                 let adresWeather = "https://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
                   "&lang=PL&units=metric&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
-                const czasPomiaru = new Date();
-                const godzinaPomiaru = czasPomiaru.getHours();
+
                 
                 let wybor;          
                 switch (godzinaPomiaru) {
@@ -418,36 +388,34 @@ switch (a) {
                   fetch(adresWeather)
                   .then(res => res.json())
                   .then(res => { 
-                  //  drawChart;
+
             elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.city.name + " " + res.city.country;
             elementTerazOpis.innerHTML = res.list[0].weather[0].description;
-            wstawObrazek(res.list[0].weather[0].icon, "#obrazekAktualna");
+            wstawObrazek(res.list[0].weather[0].icon, "#obrazekAktualna", 140);
             ustawWiatr(res.list[0].wind.deg, "#wiatrAktualna");
-            elementTerazTemp.innerHTML = res.list[0].main.temp + " °C";
-            elementTerazTempO.innerHTML = res.list[0].main.feels_like + " °C";
+            elementTerazTemp.innerHTML = Math.round(res.list[0].main.temp) + " °C";
+            elementTerazTempO.innerHTML = Math.round(res.list[0].main.feels_like) + " °C";
             elementTerazCisnienie.innerHTML = res.list[0].main.pressure + " hPa";
             elementTerazWiatr.innerHTML = res.list[0].wind.speed + " m/s";
 
             elementJutroOpis.innerHTML = res.list[wybor].weather[0].description;
-            wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro");
+            wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro", 90);
             ustawWiatr(res.list[wybor].wind.deg, "#wiatrJutro");
-            elementJutroTemp.innerHTML = res.list[wybor].main.temp + " °C";
+            elementJutroTemp.innerHTML = Math.round(res.list[wybor].main.temp) + " °C";
             elementJutroWiatr.innerHTML = res.list[wybor].wind.speed + " m/s";
 
             elementPojutrzeOpis.innerHTML = res.list[wybor+8].weather[0].description;
-            wstawObrazek(res.list[wybor+8].weather[0].icon, "#obrazekPojutrze");
+            wstawObrazek(res.list[wybor+8].weather[0].icon, "#obrazekPojutrze", 90);
             ustawWiatr(res.list[wybor+8].wind.deg, "#wiatrPojutrze");
-            elementPojutrzeTemp.innerHTML = res.list[wybor+8].main.temp + " °C";
+            elementPojutrzeTemp.innerHTML = Math.round(res.list[wybor+8].main.temp) + " °C";
             elementPojutrzeWiatr.innerHTML = res.list[wybor+8].wind.speed + " m/s";
 
             elementZa3Opis.innerHTML = res.list[wybor+16].weather[0].description; 
-            wstawObrazek(res.list[wybor+16].weather[0].icon, "#obrazekZa3");
+            wstawObrazek(res.list[wybor+16].weather[0].icon, "#obrazekZa3", 90);
             ustawWiatr(res.list[wybor+16].wind.deg, "#wiatrZa3");
-            elementZa3Temp.innerHTML = res.list[wybor+16].main.temp + " °C";
+            elementZa3Temp.innerHTML = Math.round(res.list[wybor+16].main.temp) + " °C";
             elementZa3Wiatr.innerHTML = res.list[wybor+16].wind.speed + " m/s";
             
-            //elementGodzinowa1.innerHTML = res.list[1].dt_txt(str.substr(12, 16));
-
 
 
             function Text (parText) {
@@ -457,7 +425,7 @@ switch (a) {
               let TextString;
               String = (res.list[parText].dt_txt);
               ShortString = (String.slice(11, 16));
-              Temp = ShortString + " - " + res.list[parText].main.temp + " °C ";
+              Temp = ShortString + " - " + Math.round(res.list[parText].main.temp) + " °C ";
               TextString = Temp.toString();
 
               return TextString;  
@@ -466,7 +434,7 @@ switch (a) {
             function Temp (parTemp) {
               let String;
               let TextString;
-              String = (res.list[parTemp].main.temp);
+              String = res.list[parTemp].main.temp;
               TextString = String.toString();
 
               return TextString;  
@@ -546,9 +514,6 @@ let options = {
     legend:{
       labels:{
         generateLabels: "",
-        font:{
-          size: 36
-        }
       }
     }
   }
@@ -557,10 +522,8 @@ let options = {
 data.labels = [Text(1), Text(2), Text(3), Text(4), Text(5)];
 data.datasets[0].data = [Temp(1), Temp(2), Temp(3), Temp(4), Temp(5)];
 
-console.log(data.labels);
-console.log(data.datasets[0].data);
 
-Chart.defaults.font.size = 16;
+Chart.defaults.font.size = 18;
 
 let canvasDraw = document.querySelector("#myChart");
 
@@ -583,49 +546,6 @@ let ctxDraw = canvasDraw.getContext("2d");
                     })
                   })
                 };
-/*
-
-  <div id="chart_div" style="width: 100%; height: 500px;"></div>
-
-
-google.charts.load('current', {'packages':['corechart']});
-                    google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-      var data = google.visualization.arrayToDataTable([
-        ['Date', '°C'],
-        [Godzinowa1,  res.list[1].main.temp],
-        [Godzinowa2,  res.list[2].main.temp],
-        [Godzinowa3,  res.list[3].main.temp],
-        [Godzinowa4,  res.list[4].main.temp],
-        [Godzinowa5,  res.list[5].main.temp],
-      ]);
-
-      var options = {
-        annotations: {
-    textStyle: {
-      fontName: 'Times-Roman',
-      fontSize: 18,
-      bold: true,
-      italic: true,
-      // The color of the text.
-      color: '#871b47',
-      // The color of the text outline.
-      auraColor: '#d799ae',
-      // The transparency of the text.
-      opacity: 0.8
-    }
-  },
-        title: '',
-        hAxis: {title: 'Temperatura',  titleTextStyle: {color: '#333'}},
-        vAxis: {minValue: 0}
-      };
-
-      var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
-    } */
-
-
 
 
     window.addEventListener("load", () => {
