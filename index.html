@@ -17,8 +17,9 @@
     <p>Wpisz miasto:</p>
     
     <input id="szukaj"></input>
+    <button id="przyciskSzukaj">Znajdź</button>
     <select id="wpisyMiast"></select>
-    <button id="przycisk">Znajdź</button>
+    <button id="przyciskUsun">Usuń wpisy</button>
   </section>
 
   <section>
@@ -158,9 +159,11 @@
     let elementZa3Wiatr = document.querySelector(".pogodaZa3 .wiatr");
 
     let miasta = [];
+    let putStorage = [];
     let nowyWpisMiasta = document.querySelector(".wpisyMiast");
     let szukaj = "";
-    let elementPrzycisk = document.querySelector("#przycisk");
+    //let elementPrzycisk = document.querySelector("#przycisk");
+    //let usunWpisy = document.querySelector("#usunWpisy");
     //let loader = document.querySelector("#loader");
     let myLineChart;
 
@@ -338,13 +341,6 @@
                   fetch(adresWeather)
                   .then(res => res.json())
                   .then(res => { 
-                         
-                  
-                  miasta.push(res.city.name);
-                  localStorage.setItem("miasta", miasta);
-                  console.log(miasta);
-
-
 
             elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.city.name + " " + res.city.country;
             elementTerazOpis.innerHTML = res.list[0].weather[0].description;
@@ -404,7 +400,6 @@
             };
 
 
-  
             let data = {
             labels: [],
             datasets: [
@@ -428,8 +423,6 @@
                   pointHoverBorderColor : 'rgba(236,115,87, 1)',
                   data: [], }
              ]};
-
-
 
               let options = {
                 plugins:{
@@ -479,36 +472,46 @@ let ctxDraw = canvasDraw.getContext("2d");
         let lat = position.coords.latitude;
         getWeather(lat, lon);
       });
-        let getStorage_miasta = localStorage.getItem("miasta");
-                if (getStorage_miasta === null) {
+        
+        let getStorage = localStorage.getItem("miasta");
+                if (getStorage === null) {
+                    lista("");
+                    miasta.push("");
                     return;}
                 else {
-            getStorage_miasta = localStorage.getItem("miasta");       
-                for (i=0; i < getStorage_miasta.length; i++) {
-                     miasta.push(getStorage_miasta[i]);
-                     console.log(miasta);}
-                     /*
-                     let nowyWpisMiasta = document.createElement("option");
-                     nowyWpisMiasta.value = getStorage_miasta;
-                     nowyWpisMiasta.innerHTML = getStorage_miasta;
-                     document.querySelector("#wpisyMiast").appendChild(nowyWpisMiasta);}*/
-            };  
+            getStorage = JSON.parse(localStorage.getItem("miasta"))       
+                   
+                    for (i=0; i < getStorage.length; i++) {
+                      miasta.push(getStorage[i]);
+                      lista(miasta[miasta.length - 1]);}
+            }; 
         
     });
 
       document.querySelector("#wpisyMiast").addEventListener("change", (wybor) => {
-        let mojWybor = wybor.target.value;
-        myLineChart.destroy();
-        getCoordinates(mojWybor);
+              let mojWybor = wybor.target.value;
+              myLineChart.destroy();
+              getCoordinates(mojWybor);
       });
 
-      document.querySelector("#przycisk").addEventListener("click", () => {
-        myLineChart.destroy();
-        let parCity = document.querySelector("#szukaj").value;
-        getCoordinates(parCity);
-        lista(parCity);
+      document.querySelector("#przyciskSzukaj").addEventListener("click", () => {
+              myLineChart.destroy();
+              let parCity = document.querySelector("#szukaj").value;
+              getCoordinates(parCity);
+              miasta.push(parCity);
+              lista(parCity);
+              localStorage.setItem("miasta", JSON.stringify(miasta));
+              document.querySelector("#szukaj").value = "";
       });
 
+      document.querySelector("#przyciskUsun").addEventListener("click", () => {
+                let div = document.querySelector("#wpisyMiast"), child;
+                while ((child = div.firstChild)) {
+                div.removeChild(child);
+                };
+                miasta.length = 0;
+                localStorage.clear();
+      });
         
     </script>
 </body>
