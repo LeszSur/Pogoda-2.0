@@ -42,7 +42,7 @@
       <h1 id="temp"></h1>
     </div>
     <div>
-      <canvas id="obrazekAktualna" height="140" width="300"></canvas>
+      <canvas id="obrazekAktualna" height="150" width="300"></canvas>
     </div>
   </section>
 
@@ -57,7 +57,7 @@
   <section>
     <div id="panel">
       <h2 id="jutro"></h2>
-      <canvas id="obrazekJutro" height="120"></canvas>
+      <canvas id="obrazekJutro" height="90"></canvas>
       <h2 id="opisJutro"></h2>
       <div class="pogodaJutro">
         <div>Temperatura: <span class="temp"></span></div>
@@ -72,7 +72,7 @@
     </div>
     <div id="panel">
       <h2 id="pojutrze"></h2>
-      <canvas id="obrazekPojutrze" height="120"></canvas>
+      <canvas id="obrazekPojutrze" height="90"></canvas>
       <h2 id="opisPojutrze"></h2>
       <div class="pogodaPojutrze">
         <div>Temperatura: <span class="temp"></span></div>
@@ -85,7 +85,7 @@
     </div>
     <div id="panel">
       <h2 id="zaTrzy"></h2>
-      <canvas id="obrazekZa3" height="120"></canvas>
+      <canvas id="obrazekZa3" height="90"></canvas>
       <h2 id="opisZa3"></h2>
       <div class="pogodaZa3">
         <div>Temperatura: <span class="temp"></span></div>
@@ -166,34 +166,32 @@
     const dzienPomiaru = czasPomiaru.getDay();
     const godzinaPomiaru = czasPomiaru.getHours();
     
-    wstawDzień("#jutro", dzienPomiaru, 1);
-    wstawDzień("#pojutrze", dzienPomiaru, 2);
-    wstawDzień("#zaTrzy", dzienPomiaru, 3);
+    wstawDzień("#jutro", dzienPomiaru + 1);
+    wstawDzień("#pojutrze", dzienPomiaru + 2);
+    wstawDzień("#zaTrzy", dzienPomiaru + 3);
 
 
 
-    function wstawDzień (a, b, c){
+    function wstawDzień (sitePos, select){
 
-      const dzienWstaw = (b + c);
-
-      switch (dzienWstaw) {
-        case 1: document.querySelector(a).innerHTML = "poniedziałek";
+      switch (select) {
+        case 1: document.querySelector(sitePos).innerHTML = "poniedziałek";
           break;
-        case 2: document.querySelector(a).innerHTML = "wtorek";
+        case 2: document.querySelector(sitePos).innerHTML = "wtorek";
           break;
-        case 3: document.querySelector(a).innerHTML = "środa";
+        case 3: document.querySelector(sitePos).innerHTML = "środa";
           break;
-        case 4: document.querySelector(a).innerHTML = "czwartek";
+        case 4: document.querySelector(sitePos).innerHTML = "czwartek";
           break;
-        case 5: document.querySelector(a).innerHTML = "piątek";
+        case 5: document.querySelector(sitePos).innerHTML = "piątek";
           break;
-        case 6: document.querySelector(a).innerHTML = "sobota";
+        case 6: document.querySelector(sitePos).innerHTML = "sobota";
           break;
-        case 7: document.querySelector(a).innerHTML = "niedziela";
+        case 7: document.querySelector(sitePos).innerHTML = "niedziela";
           break;
-        case 8: document.querySelector(a).innerHTML = "poniedziałek";
+        case 8: document.querySelector(sitePos).innerHTML = "poniedziałek";
           break;
-        case 9: document.querySelector(a).innerHTML = "wtorek";
+        case 9: document.querySelector(sitePos).innerHTML = "wtorek";
           break;
     };
   };
@@ -208,106 +206,56 @@
     };
 
 
-    function wstawObrazekGodz(a, b, c) {
+    function wstawObrazek(select, sitePos, startPos, size) {
 
-const canvas = document.querySelector(b);
-const ctx = canvas.getContext("2d");
-const image = new Image();
+    const canvas = document.querySelector(sitePos);
+    const ctx = canvas.getContext("2d");
+    const image = new Image();
 
-image.addEventListener("load", e => {
-  ctx.clearRect(c, 0, 50, 50);
-  ctx.drawImage(image, c, 0, 50, 50);
-});
-switch (a) {
-  case "01d": image.src = "img/slonce.png";
-    break;
-  case "01n": image.src = "img/slonce.png";
-    break;
-  case "02d": image.src = "img/chmury1.png";
-    break;
-  case "02n": image.src = "img/chmury1.png";
-    break;
-  case "03d": image.src = "img/chmury2.png";
-    break;
-  case "03n": image.src = "img/chmury2.png";
-    break;
-  case "04d": image.src = "img/chmury3.png";
-    break;
-  case "04n": image.src = "img/chmury3.png";
-    break;
-  case "09d": image.src = "img/deszcz2.png";
-    break;
-  case "09n": image.src = "img/deszcz2.png";
-    break;
-  case "10d": image.src = "img/deszcz1.png";
-    break;
-  case "10n": image.src = "img/deszcz1.png";
-    break;
-  case "11d": image.src = "img/burza.png";
-    break;
-  case "11n": image.src = "img/burza.png";
-    break;  
-  case "13d": image.src = "img/snieg.png";
-    break;
-  case "13n": image.src = "img/snieg.png";
-    break;
-  case "50d": image.src = "img/mgla.png";
-    break;
-  case "50n": image.src = "img/mgla.png";
-    break;
-};
-};
-
-
-    function wstawObrazek(a, b, c) {
-
-      const canvas = document.querySelector(b);
-      const ctx = canvas.getContext("2d");
-      const image = new Image();
-
-      image.addEventListener("load", e => {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.drawImage(image, 0, 0, c, c);
-      });
-      switch (a) {
-        case "01d": image.src = "img/slonce.png";
-          break;
-        case "01n": image.src = "img/slonce.png";
-          break;
-        case "02d": image.src = "img/chmury1.png";
-          break;
-        case "02n": image.src = "img/chmury1.png";
-          break;
-        case "03d": image.src = "img/chmury2.png";
-          break;
-        case "03n": image.src = "img/chmury2.png";
-          break;
-        case "04d": image.src = "img/chmury3.png";
-          break;
-        case "04n": image.src = "img/chmury3.png";
-          break;
-        case "09d": image.src = "img/deszcz2.png";
-          break;
-        case "09n": image.src = "img/deszcz2.png";
-          break;
-        case "10d": image.src = "img/deszcz1.png";
-          break;
-        case "10n": image.src = "img/deszcz1.png";
-          break;
-        case "11d": image.src = "img/burza.png";
-          break;
-        case "11n": image.src = "img/burza.png";
-          break;  
-        case "13d": image.src = "img/snieg.png";
-          break;
-        case "13n": image.src = "img/snieg.png";
-          break;
-        case "50d": image.src = "img/mgla.png";
-          break;
-        case "50n": image.src = "img/mgla.png";
-          break;
+    image.addEventListener("load", e => {
+      ctx.clearRect(startPos, 0, size, size);
+      ctx.drawImage(image, startPos, 0, size, size);
+    });
+    switch (select) {
+      case "01d": image.src = "img/slonce.png";
+        break;
+      case "01n": image.src = "img/slonce.png";
+        break;
+      case "02d": image.src = "img/chmury1.png";
+        break;
+      case "02n": image.src = "img/chmury1.png";
+        break;
+      case "03d": image.src = "img/chmury2.png";
+        break;
+      case "03n": image.src = "img/chmury2.png";
+        break;
+      case "04d": image.src = "img/chmury3.png";
+        break;
+      case "04n": image.src = "img/chmury3.png";
+        break;
+      case "09d": image.src = "img/deszcz2.png";
+        break;
+      case "09n": image.src = "img/deszcz2.png";
+        break;
+      case "10d": image.src = "img/deszcz1.png";
+        break;
+      case "10n": image.src = "img/deszcz1.png";
+        break;
+      case "11d": image.src = "img/burza.png";
+        break;
+      case "11n": image.src = "img/burza.png";
+        break;  
+      case "13d": image.src = "img/snieg.png";
+        break;
+      case "13n": image.src = "img/snieg.png";
+        break;
+      case "50d": image.src = "img/mgla.png";
+        break;
+      case "50n": image.src = "img/mgla.png";
+        break;
       };
     };
+
 
     function ustawWiatr(parRotate, parSelector) {
       const obrot = 'rotate('+ parRotate +'deg)';
@@ -327,7 +275,7 @@ switch (a) {
           }
           
     function getWeather(parLat, parLon){
-                let adresWeather = "https://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
+        let adresWeather = "https://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
                   "&lang=PL&units=metric&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
 
                 
@@ -389,29 +337,36 @@ switch (a) {
                   .then(res => res.json())
                   .then(res => { 
 
+
             elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.city.name + " " + res.city.country;
             elementTerazOpis.innerHTML = res.list[0].weather[0].description;
-            wstawObrazek(res.list[0].weather[0].icon, "#obrazekAktualna", 140);
+            wstawObrazek(res.list[0].weather[0].icon, "#obrazekAktualna", 60, 150);
             ustawWiatr(res.list[0].wind.deg, "#wiatrAktualna");
             elementTerazTemp.innerHTML = Math.round(res.list[0].main.temp) + " °C";
             elementTerazTempO.innerHTML = Math.round(res.list[0].main.feels_like) + " °C";
             elementTerazCisnienie.innerHTML = res.list[0].main.pressure + " hPa";
             elementTerazWiatr.innerHTML = res.list[0].wind.speed + " m/s";
 
+            wstawObrazek(res.list[1].weather[0].icon, "#ico", 55, 50);
+            wstawObrazek(res.list[2].weather[0].icon, "#ico", 280, 50);
+            wstawObrazek(res.list[3].weather[0].icon, "#ico", 516, 50);
+            wstawObrazek(res.list[4].weather[0].icon, "#ico", 740, 50);
+            wstawObrazek(res.list[5].weather[0].icon, "#ico", 960, 50);
+            
             elementJutroOpis.innerHTML = res.list[wybor].weather[0].description;
-            wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro", 90);
+            wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro", 20, 80);
             ustawWiatr(res.list[wybor].wind.deg, "#wiatrJutro");
             elementJutroTemp.innerHTML = Math.round(res.list[wybor].main.temp) + " °C";
             elementJutroWiatr.innerHTML = res.list[wybor].wind.speed + " m/s";
 
             elementPojutrzeOpis.innerHTML = res.list[wybor+8].weather[0].description;
-            wstawObrazek(res.list[wybor+8].weather[0].icon, "#obrazekPojutrze", 90);
+            wstawObrazek(res.list[wybor+8].weather[0].icon, "#obrazekPojutrze", 20, 80);
             ustawWiatr(res.list[wybor+8].wind.deg, "#wiatrPojutrze");
             elementPojutrzeTemp.innerHTML = Math.round(res.list[wybor+8].main.temp) + " °C";
             elementPojutrzeWiatr.innerHTML = res.list[wybor+8].wind.speed + " m/s";
 
             elementZa3Opis.innerHTML = res.list[wybor+16].weather[0].description; 
-            wstawObrazek(res.list[wybor+16].weather[0].icon, "#obrazekZa3", 90);
+            wstawObrazek(res.list[wybor+16].weather[0].icon, "#obrazekZa3", 20, 80);
             ustawWiatr(res.list[wybor+16].wind.deg, "#wiatrZa3");
             elementZa3Temp.innerHTML = Math.round(res.list[wybor+16].main.temp) + " °C";
             elementZa3Wiatr.innerHTML = res.list[wybor+16].wind.speed + " m/s";
@@ -441,83 +396,42 @@ switch (a) {
             };
 
 
-            /*elementGodzinowa1.innerHTML = Text(1);
-            elementGodzinowa2.innerHTML = Text(2);
-            elementGodzinowa3.innerHTML = Text(3);
-            elementGodzinowa4.innerHTML = Text(4);
-            elementGodzinowa5.innerHTML = Text(5);
-
-            elementGodzinowaT1.innerHTML = res.list[1].main.temp + " °C ";
-            elementGodzinowaT2.innerHTML = res.list[2].main.temp + " °C ";
-            elementGodzinowaT3.innerHTML = res.list[3].main.temp + " °C ";
-            elementGodzinowaT4.innerHTML = res.list[4].main.temp + " °C ";
-            elementGodzinowaT5.innerHTML = res.list[5].main.temp + " °C ";
-
-            wstawObrazekGodzinowa(res.list[1].weather[0].icon, "#ico1");
-            wstawObrazekGodzinowa(res.list[2].weather[0].icon, ".pogodaGodzinowa .g2 #ico2");
-            wstawObrazekGodzinowa(res.list[3].weather[0].icon, ".pogodaGodzinowa .g3 #ico3");
-            wstawObrazekGodzinowa(res.list[4].weather[0].icon, ".pogodaGodzinowa .g4 #ico4");
-            wstawObrazekGodzinowa(res.list[5].weather[0].icon, ".pogodaGodzinowa .g5 #ico5"); */
-
-            wstawObrazekGodz(res.list[1].weather[0].icon, "#ico", 55);
-            wstawObrazekGodz(res.list[2].weather[0].icon, "#ico", 280);
-            wstawObrazekGodz(res.list[3].weather[0].icon, "#ico", 516);
-            wstawObrazekGodz(res.list[4].weather[0].icon, "#ico", 740);
-            wstawObrazekGodz(res.list[5].weather[0].icon, "#ico", 960);
-
-            /*elementGodzinowaO1.innerHTML = res.list[1].weather[0].description;
-            elementGodzinowaO2.innerHTML = res.list[2].weather[0].description;
-            elementGodzinowaO3.innerHTML = res.list[3].weather[0].description;
-            elementGodzinowaO4.innerHTML = res.list[4].weather[0].description;
-            elementGodzinowaO5.innerHTML = res.list[5].weather[0].description;
-
-            elementGodzinowaW1.innerHTML = "wiatr: "+res.list[1].wind.speed+" m/s";
-            elementGodzinowaW2.innerHTML = "wiatr: "+res.list[2].wind.speed+" m/s";
-            elementGodzinowaW3.innerHTML = "wiatr: "+res.list[3].wind.speed+" m/s";
-            elementGodzinowaW4.innerHTML = "wiatr: "+res.list[4].wind.speed+" m/s";
-            elementGodzinowaW5.innerHTML = "wiatr: "+res.list[5].wind.speed+" m/s"; */
-
-
   
-    let data = {
-    labels: [],
-    datasets: [
-        {
-            label: "",
-            //linia
-            borderDash: [3, 3], //jezeli ustawione to przerywana linia
-            borderColor : 'rgba(236,115,87, 0.7)',
-            pointBorderColor : 'rgba(236,115,87, 0.7)',
-            borderWidth : 2,
-            //kolor tla i legendy
-            fill: true, //czy wypelnic zbior
-            backgroundColor : 'rgba(236,115,87, 0.1)', //wplywa tez na kolor w legendzie
-            //ustawienia punktu
-            pointRadius : 4,
-            pointBorderWidth : 1,
-            pointBackgroundColor : 'rgba(255,255,255,1)',
-            //ustawienia punktu hover
-            pointHoverRadius: 6,
-            pointHoverBorderWidth: 3,
-            pointHoverBackgroundColor : 'rgba(255,255,255,1)',
-            pointHoverBorderColor : 'rgba(236,115,87, 1)',
-            data: [],
-        }
-        
-    ]
-};
+            let data = {
+            labels: [],
+            datasets: [
+                 {label: "",
+                  //linia
+                  borderDash: [3, 3], //jezeli ustawione to przerywana linia
+                  borderColor : 'rgba(236,115,87, 0.7)',
+                  pointBorderColor : 'rgba(236,115,87, 0.7)',
+                  borderWidth : 2,
+                  //kolor tla i legendy
+                  fill: true, //czy wypelnic zbior
+                  backgroundColor : 'rgba(236,115,87, 0.1)', //wplywa tez na kolor w legendzie
+                  //ustawienia punktu
+                  pointRadius : 4,
+                  pointBorderWidth : 1,
+                  pointBackgroundColor : 'rgba(255,255,255,1)',
+                  //ustawienia punktu hover
+                  pointHoverRadius: 6,
+                  pointHoverBorderWidth: 3,
+                  pointHoverBackgroundColor : 'rgba(255,255,255,1)',
+                  pointHoverBorderColor : 'rgba(236,115,87, 1)',
+                  data: [], }
+             ]};
 
 
 
-let options = {
-  plugins:{
-    legend:{
-      labels:{
-        generateLabels: "",
-      }
-    }
-  }
-};
+              let options = {
+                plugins:{
+                  legend:{
+                    labels:{
+                      generateLabels: "",
+                    }
+                  }
+                }
+              };
 
 data.labels = [Text(1), Text(2), Text(3), Text(4), Text(5)];
 data.datasets[0].data = [Temp(1), Temp(2), Temp(3), Temp(4), Temp(5)];
@@ -535,14 +449,17 @@ let ctxDraw = canvasDraw.getContext("2d");
     options: options
 });
 
-
-
             let adresAir = "https://api.openweathermap.org/data/2.5/air_pollution?lat="
                     + parLat +"&lon=" + parLon + "&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
             fetch(adresAir)
             .then(res => res.json())
             .then(res => { 
-              elementTerazPowietrze.innerHTML = "PM10: " + res.list[0].components.pm10 + ", PM2.5: " + res.list[0].components.pm2_5;
+              console.log(res);
+              if ((res.list[0].components.pm10 >= 180) || (res.list[0].components.pm2_5 >= 110) || (res.list[0].components.no2 >= 400) || (res.list[0].components.o3 >= 240)) {elementTerazPowietrze.innerHTML = "bardzo złe"}
+              else if ((180 > res.list[0].components.pm10 > 90.1) || (110 > res.list[0].components.pm2_5 > 55.1) || (400 > res.list[0].components.no2 > 200.1) || (240 >res.list[0].components.o3 > 180.1)) {elementTerazPowietrze.innerHTML = "złe"}
+              else if ((90 > res.list[0].components.pm10 > 50.1) || (55 > res.list[0].components.pm2_5 > 30.1) || (200 > res.list[0].components.no2 > 100.1) || (180 >res.list[0].components.o3 > 120.1)) {elementTerazPowietrze.innerHTML = "umiarkowane"}
+              else if ((50 > res.list[0].components.pm10 > 25.1) || (30 > res.list[0].components.pm2_5 > 15.1) || (100 > res.list[0].components.no2 > 50.1) || (120 >res.list[0].components.o3 > 60.1)) {elementTerazPowietrze.innerHTML = "dobre"}
+              else if ((25 > res.list[0].components.pm10 > 0) || (15 > res.list[0].components.pm2_5 > 0) || (50 > res.list[0].components.no2 > 0) || (60 >res.list[0].components.o3 > 0)) {elementTerazPowietrze.innerHTML = "bardzo dobre"}
                     })
                   })
                 };
@@ -557,13 +474,13 @@ let ctxDraw = canvasDraw.getContext("2d");
         });
       });
 
-    document.querySelector("#przycisk").addEventListener("click", () => {
+      document.querySelector("#przycisk").addEventListener("click", () => {
         myLineChart.destroy();
         let parCity = document.querySelector("#szukaj").value;
         getCoordinates(parCity);
       });
   
-  </script>
+    </script>
 </body>
 
 </html>
