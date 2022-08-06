@@ -4,105 +4,82 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     width:auto;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;   }
+    font-family: Verdana, Geneva, Tahoma, sans-serif  
+}
 
 #naglowek{
     margin: 20px;
     font-size: 30px;
-    color: blue}
+    color: blue
+}
 
 h1{
     margin: 20px;
     font-size: 30px;
-    color: blue}
+    color: blue
+}
 
 h2{
     margin: 20px;
     font-size: 20px;
-    color: blue}
+    color: blue
+}
 
 h3{
     margin: 20px;
     font-size: 20px;
-    color:blue} 
+    color:blue
+} 
     
 div{
     margin: 10px;
-    font-size: 15px;}
-
-    .g1{
-        font-size: 14px;
-        color:solid green 1px;
-        margin: 20px;
-        padding: 20px;
-        border: solid green 1px;
-        border-radius: 15px;}
-
-    .g2{
-        font-size: 14px;
-        color:solid green 1px;
-        margin: 20px;
-        padding: 20px;
-        border: solid green 1px;
-        border-radius: 15px;}
-
-    .g3{
-        font-size: 14px;
-        color:solid green 1px;
-        margin: 20px;
-        padding: 20px;
-        border: solid green 1px;
-        border-radius: 15px;}
-
-    .g4{
-        font-size: 14px;
-        color:solid green 1px;
-        margin: 20px;
-        padding: 20px;
-        border: solid green 1px;
-        border-radius: 15px;}
-
-    .g5{
-        font-size: 14px;
-        color:solid green 1px;
-        margin: 20px;
-        padding: 20px;
-        border: solid green 1px;
-        border-radius: 15px;}
+    font-size: 15px
+}
 
 
 #opisAktualna{
     margin-left: 100px;
-    color: green}
+    color: green
+}
 
 #opisJutro{
-        color: black}   
+        color: grey
+    }   
 
 #opisPojutrze{
-        color: black}
+        color: grey
+    }
         
 #opisZa3{
-        color: black}
+        color: grey
+    }
 
 #temp{
     margin-left: 100px;
-    color: green}
-
-.pogodaDzisiajGodzinowa{
-    margin-left: 20px;}
+    color: green
+}
+.temp{
+    margin: 24px;
+    font-size: 20px;
+    color: grey
+}
 
 canvas{
-    margin-left: 40px;}
+    margin-left: 40px
+}
 
 section {
-    display: flex;}
+    display: flex
+}
 
 .loader {
     justify-content: left;
-    display: none;}
+    display: none
+}
 
 .loader.visible {
-    display: flex;}
+    display: flex
+}
 
 #panel{
     font-size: 14px;
@@ -110,10 +87,20 @@ section {
     margin: 10px;
     padding: 5px;
     border: solid green 1px;
-    border-radius: 15px;}
+    border-radius: 15px
+}
 
 .selektor {
-  transform: rotate(30deg);
+  transform: rotate(30deg)
 }
+
+#foot {
+    color: grey;
+    margin: 20px;
+    font-size: 14px;
+    font-style: italic
+}
+
+
 
 
