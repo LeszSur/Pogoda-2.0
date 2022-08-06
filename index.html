@@ -53,7 +53,19 @@
   <section>
   <div class="chart-cnt">
     <canvas id="myChart" width="1040" height="200"></canvas>
-    <canvas id="ico" width="1040" height="60"></canvas>
+    <canvas id="ico" width="1040" height="55"></canvas>
+  </div>
+  </section>
+  <section>
+    <div>
+    <canvas id="tempg1" width="94" height="20"></canvas>
+    <canvas id="tempg2" width="94" height="20"></canvas>
+    <canvas id="tempg3" width="94" height="20"></canvas>
+    <canvas id="tempg4" width="94" height="20"></canvas>
+    <canvas id="tempg5" width="94" height="20"></canvas>
+    <canvas id="tempg6" width="94" height="20"></canvas>
+    <canvas id="tempg7" width="94" height="20"></canvas>
+    <canvas id="tempg8" width="94" height="20"></canvas>
   </div>
 </section>
 <h3>Prognoza na najbliższe 3 dni:</h3>
@@ -351,11 +363,23 @@
             elementTerazCisnienie.innerHTML = res.list[0].main.pressure + " hPa";
             elementTerazWiatr.innerHTML = res.list[0].wind.speed + " m/s";
 
-            wstawObrazek(res.list[1].weather[0].icon, "#ico", 55, 50);
-            wstawObrazek(res.list[2].weather[0].icon, "#ico", 280, 50);
-            wstawObrazek(res.list[3].weather[0].icon, "#ico", 516, 50);
-            wstawObrazek(res.list[4].weather[0].icon, "#ico", 740, 50);
-            wstawObrazek(res.list[5].weather[0].icon, "#ico", 960, 50);
+            wstawObrazek(res.list[1].weather[0].icon, "#ico", 10, 55);
+            wstawObrazek(res.list[2].weather[0].icon, "#ico", 150, 50);
+            wstawObrazek(res.list[3].weather[0].icon, "#ico", 290, 50);
+            wstawObrazek(res.list[4].weather[0].icon, "#ico", 430, 50);
+            wstawObrazek(res.list[5].weather[0].icon, "#ico", 570, 50);
+            wstawObrazek(res.list[6].weather[0].icon, "#ico", 710, 50);
+            wstawObrazek(res.list[7].weather[0].icon, "#ico", 850, 50);
+            wstawObrazek(res.list[8].weather[0].icon, "#ico", 990, 50);
+
+            tempDraw(res.list[1].main.temp, "#tempg1", 15);
+            tempDraw(res.list[2].main.temp, "#tempg2", 15);
+            tempDraw(res.list[3].main.temp, "#tempg3", 15);
+            tempDraw(res.list[4].main.temp, "#tempg4", 15);
+            tempDraw(res.list[5].main.temp, "#tempg5", 15);
+            tempDraw(res.list[6].main.temp, "#tempg6", 15);
+            tempDraw(res.list[7].main.temp, "#tempg7", 15);
+            tempDraw(res.list[8].main.temp, "#tempg8", 15);
             
             elementJutroOpis.innerHTML = res.list[wybor].weather[0].description;
             wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro", 20, 80);
@@ -375,7 +399,7 @@
             elementZa3Temp.innerHTML = Math.round(res.list[wybor+16].main.temp) + " °C";
             elementZa3Wiatr.innerHTML = res.list[wybor+16].wind.speed + " m/s";
             
-
+            
 
             function Text (parText) {
               let String;
@@ -384,10 +408,10 @@
               let TextString;
               String = (res.list[parText].dt_txt);
               ShortString = (String.slice(11, 16));
-              Temp = ShortString + " - " + Math.round(res.list[parText].main.temp) + " °C ";
-              TextString = Temp.toString();
+              //Temp = ShortString + " " + Math.round(res.list[parText].main.temp) + "°C ";
+              //TextString = Temp.toString();
 
-              return TextString;  
+              return ShortString;  
             };
 
             function Temp (parTemp) {
@@ -396,9 +420,27 @@
               String = res.list[parTemp].main.temp;
               TextString = String.toString();
 
-              return TextString;  
-            };
+              return TextString;
+          };
 
+             function tempDraw (parTempDraw, sitePos, startPos) {
+              let tempText = Math.round(parTempDraw) + " °C";
+              const canvas = document.querySelector(sitePos);
+              const ctx = canvas.getContext("2d");
+              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+              ctx.font = "18px Arial";
+              ctx.fillStyle = 'grey';
+              ctx.fillText(tempText, 15, startPos);
+              
+              /*image.addEventListener("load", e => {
+                ctx.translate(10, 50);
+                ctx.fillStyle = "Red";
+                ctx.mozTextStyle = "17pt Arial";
+                ctx.mozDrawText(res.list[parTemp].main.temp);  
+              //ctx.clearRect(startPos, 0, 18, 18);
+              //ctx.mozDrawText(image, startPos, 0, size, size);
+              });*/
+            };
 
             let data = {
             labels: [],
@@ -434,8 +476,8 @@
                 }
               };
 
-data.labels = [Text(1), Text(2), Text(3), Text(4), Text(5)];
-data.datasets[0].data = [Temp(1), Temp(2), Temp(3), Temp(4), Temp(5)];
+data.labels = [Text(1), Text(2), Text(3), Text(4), Text(5), Text(6), Text(7), Text(8)];
+data.datasets[0].data = [Temp(1), Temp(2), Temp(3), Temp(4), Temp(5), Temp(6), Temp(7), Temp(8)];
 
 
 Chart.defaults.font.size = 18;
@@ -485,7 +527,7 @@ let ctxDraw = canvasDraw.getContext("2d");
                       miasta.push(getStorage[i]);
                       lista(miasta[miasta.length - 1]);}
             }; 
-        
+   
     });
 
       document.querySelector("#wpisyMiast").addEventListener("change", (wybor) => {
