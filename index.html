@@ -57,14 +57,14 @@
   </section>
   <section>
     <div>
-    <canvas id="tempg1" width="94" height="20"></canvas>
-    <canvas id="tempg2" width="94" height="20"></canvas>
-    <canvas id="tempg3" width="94" height="20"></canvas>
-    <canvas id="tempg4" width="94" height="20"></canvas>
-    <canvas id="tempg5" width="94" height="20"></canvas>
-    <canvas id="tempg6" width="94" height="20"></canvas>
-    <canvas id="tempg7" width="94" height="20"></canvas>
-    <canvas id="tempg8" width="94" height="20"></canvas>
+    <canvas id="timeg1" width="94" height="20"></canvas>
+    <canvas id="timeg2" width="94" height="20"></canvas>
+    <canvas id="timeg3" width="94" height="20"></canvas>
+    <canvas id="timeg4" width="94" height="20"></canvas>
+    <canvas id="timeg5" width="94" height="20"></canvas>
+    <canvas id="timeg6" width="94" height="20"></canvas>
+    <canvas id="timeg7" width="94" height="20"></canvas>
+    <canvas id="timeg8" width="94" height="20"></canvas>
   </div>
 </section>
 <h3>Prognoza na najbliższe 3 dni:</h3>
@@ -374,14 +374,14 @@
             wstawObrazek(res.list[7].weather[0].icon, "#ico", 850, 49);
             wstawObrazek(res.list[8].weather[0].icon, "#ico", 990, 49);
 
-            tempDraw(res.list[1].main.temp, "#tempg1", 15);
-            tempDraw(res.list[2].main.temp, "#tempg2", 15);
-            tempDraw(res.list[3].main.temp, "#tempg3", 15);
-            tempDraw(res.list[4].main.temp, "#tempg4", 15);
-            tempDraw(res.list[5].main.temp, "#tempg5", 15);
-            tempDraw(res.list[6].main.temp, "#tempg6", 15);
-            tempDraw(res.list[7].main.temp, "#tempg7", 15);
-            tempDraw(res.list[8].main.temp, "#tempg8", 15);
+            timeDraw(res.list[1].dt_txt, "#timeg1", 15);
+            timeDraw(res.list[2].dt_txt, "#timeg2", 15);
+            timeDraw(res.list[3].dt_txt, "#timeg3", 15);
+            timeDraw(res.list[4].dt_txt, "#timeg4", 15);
+            timeDraw(res.list[5].dt_txt, "#timeg5", 15);
+            timeDraw(res.list[6].dt_txt, "#timeg6", 15);
+            timeDraw(res.list[7].dt_txt, "#timeg7", 15);
+            timeDraw(res.list[8].dt_txt, "#timeg8", 15);
             
             elementJutroOpis.innerHTML = res.list[wybor].weather[0].description;
             wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro", 20, 90);
@@ -403,30 +403,25 @@
             
           }, 250);
 
-            function Text (parText) {
-              let String;
-              let ShortString;
-              let Temp;
-              let TextString;
-              String = (res.list[parText].dt_txt);
-              ShortString = (String.slice(11, 16));
-              return ShortString};
+            function tempChart (parText) {
+              let tempText = Math.round(res.list[parText].main.temp) + " °C";
+              return tempText};
 
-            function Temp (parTemp) {
+            function timeChart (parText) {
               let String;
               let TextString;
-              String = res.list[parTemp].main.temp;
+              String = res.list[parText].main.temp;
               TextString = String.toString();
               return TextString};
 
-             function tempDraw (parTempDraw, sitePos, startPos) {
-              let tempText = Math.round(parTempDraw) + " °C";
+             function timeDraw (parText, sitePos, startPos) {
+              let timeText = parText.slice(11, 16);
               const canvas = document.querySelector(sitePos);
               const ctx = canvas.getContext("2d");
               ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
               ctx.font = "18px Arial";
               ctx.fillStyle = 'grey';
-              ctx.fillText(tempText, 15, startPos)};
+              ctx.fillText(timeText, 15, startPos)};
 
       let dataChart = {
             labels: [],
@@ -458,10 +453,11 @@
                 }
               };
               
-
-      dataChart.labels = [Text(1), Text(2), Text(3), Text(4), Text(5), Text(6), Text(7), Text(8)];
-      dataChart.datasets[0].data = [Temp(1), Temp(2), Temp(3), Temp(4), Temp(5), Temp(6), Temp(7), Temp(8)];
-
+        for (i=0; i<8; i++){
+        
+          dataChart.labels.push(tempChart(i));
+          dataChart.datasets[0].data.push(timeChart(i))
+        };
 
       Chart.defaults.font.size = 18;
 
