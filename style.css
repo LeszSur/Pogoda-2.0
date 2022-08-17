@@ -63,6 +63,10 @@ div{
     font-size: 20px;
     color: grey
 }
+.powietrze{
+    margin: 20px;
+    font-size: 24px;
+}
 
 canvas{
     margin-left: 40px

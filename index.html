@@ -32,7 +32,6 @@
     <div class="pogodaAktualna"> 
       <div>Temp. odczuwalna: <span class="temp_od"></span></div>
       <div>Ciśnienie: <span class="cisnienie"></span></div>
-      <div>Powietrze: <span class="powietrze"></span></div>
       <div>Wiatr: <span class="wiatr"></span>
       <table>
         <tr><td id="wiatrAktualna">
@@ -48,6 +47,22 @@
     </div>
   </section>
 
+  <h3>Jakość powietrza:</h3>
+  <div><strong><span class="powietrze"></strong></bold></div>
+  <section>
+  <div class="chart-bar">
+    <canvas id="myChartAir" width="1040" height="150"></canvas>
+      </div>
+  </section>
+  <section>
+    <div>
+    <canvas id="pm10" width="212" height="20"></canvas>
+    <canvas id="pm25" width="212" height="20"></canvas>
+    <canvas id="no2" width="212" height="20"></canvas>
+    <canvas id="so3" width="212" height="20"></canvas>
+    </div>
+</section>
+  
   <h3>Prognoza godzinowa:</h3>
   <section>
   <div class="chart-cnt">
@@ -113,7 +128,7 @@
   </section>
 
   <div>
-    <p id="foot">Pogodynka LeszSur v2.1 - data.source: geoapify.com & openweathermap.org</p>
+    <p id="foot">Pogodynka LeszSur v2.2 - data.source: geoapify.com & openweathermap.org</p>
   </div>
 
 
@@ -127,7 +142,7 @@
     let elementTerazTemp = document.querySelector("#temp");
     let elementTerazTempO = document.querySelector(".pogodaAktualna .temp_od");
     let elementTerazCisnienie = document.querySelector(".pogodaAktualna .cisnienie");
-    let elementTerazPowietrze = document.querySelector(".pogodaAktualna .powietrze");
+    let elementTerazPowietrze = document.querySelector(".powietrze");
     let elementTerazWiatr = document.querySelector(".pogodaAktualna .wiatr");
 
     let elementGodzinowa1 = document.querySelector(".pogodaGodzinowa .g1 #godz1");
@@ -173,7 +188,7 @@
     let putStorage = [];
     let nowyWpisMiasta = document.querySelector(".wpisyMiast");
     let szukaj = "";
-     let myLineChart;
+     //let myLineChart;
 
     const czasPomiaru = new Date();
     const dzienPomiaru = czasPomiaru.getDay();
@@ -420,10 +435,10 @@
               const ctx = canvas.getContext("2d");
               ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
               ctx.font = "18px Arial";
-              ctx.fillStyle = 'grey';
+              ctx.fillStyle = 'black';
               ctx.fillText(timeText, 15, startPos)};
 
-      let dataChart = {
+        let dataChart = {
             labels: [],
             datasets: [
                  {label: "",
@@ -443,15 +458,20 @@
                   data: [], }
              ]};
 
-              let optionsChart = {
+        let optionsChart = {
                 plugins:{
+                  tooltip:{
+                    enabled: false,
+                  },
                   legend:{
                     labels:{
-                      generateLabels: "",
+                      generateLabels: false,
                     }
                   }
                 }
               };
+
+
               
         for (i=0; i<8; i++){
         
@@ -476,11 +496,122 @@
             fetch(adresAir)
             .then(res => res.json())
             .then(res => { 
-              if ((res.list[0].components.pm10 >= 180) || (res.list[0].components.pm2_5 >= 110) || (res.list[0].components.no2 >= 400) || (res.list[0].components.o3 >= 240)) {elementTerazPowietrze.innerHTML = "bardzo złe"}
+
+              let colorAirPM10;
+              let colorAirPM25; 
+              let colorAirNO2;
+              let colorAirSO2;
+
+              if ((res.list[0].components.pm10) > 201 || (res.list[0].components.pm2_5) > 121 || (res.list[0].components.no2) > 401 || (res.list[0].components.so2) > 501)  
+                          {elementTerazPowietrze.innerHTML = "bardzo zła"; elementTerazPowietrze.style.color = 'rgb(153, 102, 255)'}
+              else if (((res.list[0].components.pm10 > 141) && (res.list[0].components.pm10 <= 201)) || ((res.list[0].components.pm2_5 > 85) && (res.list[0].components.pm2_5 <= 121)) ||
+                       ((res.list[0].components.no2 > 201) && (res.list[0].components.no2 <= 401)) || ((res.list[0].components.so2 > 351) && (res.list[0].components.so2 <= 501)))
+                          {elementTerazPowietrze.innerHTML = "zła", elementTerazPowietrze.style.color = 'rgb(255, 99, 132)'}
+              else if (((res.list[0].components.pm10 > 101) && (res.list[0].components.pm10 <= 141)) || ((res.list[0].components.pm2_5 > 61) && (res.list[0].components.pm2_5 <= 85)) ||
+                       ((res.list[0].components.no2 > 151) && (res.list[0].components.no2 <= 201)) || ((res.list[0].components.so2 > 201) && (res.list[0].components.so2 <= 351)))  
+                          {elementTerazPowietrze.innerHTML = "dostateczna"; elementTerazPowietrze.style.color = 'rgb(255, 159, 64)'}
+              else if (((res.list[0].components.pm10 > 61) && (res.list[0].components.pm10 <= 101)) || ((res.list[0].components.pm2_5 > 37) && (res.list[0].components.pm2_5 <= 61)) ||
+                       ((res.list[0].components.no2 > 101) && (res.list[0].components.no2 <= 151)) || ((res.list[0].components.so2 > 101) && (res.list[0].components.so2 <= 201)))  
+                          {elementTerazPowietrze.innerHTML = "umiarkowana"; elementTerazPowietrze.style.color = 'rgb(255, 205, 86)'}
+              else if (((res.list[0].components.pm10 > 21) && (res.list[0].components.pm10 <= 61)) || ((res.list[0].components.pm2_5 > 13) && (res.list[0].components.pm2_5 <= 37)) ||
+                       ((res.list[0].components.no2 > 41) && (res.list[0].components.no2 <= 101)) || ((res.list[0].components.so2 > 51) && (res.list[0].components.so2 <= 101)))  
+                          {elementTerazPowietrze.innerHTML = "dobra"; elementTerazPowietrze.style.color = 'rgb(28, 199, 57)'}
+              else if (((res.list[0].components.pm10 > 0) && (res.list[0].components.pm10 <= 21)) || ((res.list[0].components.pm2_5 > 0) && (res.list[0].components.pm2_5 <= 13)) ||
+                       ((res.list[0].components.no2 > 0) && (res.list[0].components.no2 <= 41)) || ((res.list[0].components.so2 > 0) && (res.list[0].components.so2 <= 51)))
+                          { elementTerazPowietrze.innerHTML = "bardzo dobra"; elementTerazPowietrze.style.color = 'rgb(54, 162, 235)'};
+
+
+              if (res.list[0].components.pm10 > 201) {colorAirPM10 = 'rgba(153, 102, 255, 0.2)'; colorBorderAir10 = 'rgb(153, 102, 255)'}
+              else if ((res.list[0].components.pm10 > 141) && (res.list[0].components.pm10 <= 201)) {colorAirPM10 = 'rgba(255, 99, 132, 0.2)'; colorBorderAir10 = 'rgb(255, 99, 132)'}
+              else if ((res.list[0].components.pm10 > 101) && (res.list[0].components.pm10 <= 141)) {colorAirPM10 = 'rgba(255, 159, 64, 0.2)'; colorBorderAir10 = 'rgb(255, 159, 64)'}
+              else if ((res.list[0].components.pm10 > 61) && (res.list[0].components.pm10 <= 101)) {colorAirPM10 = 'rgba(255, 205, 86, 0.2)'; colorBorderAir10 = 'rgb(255, 205, 86)'}
+              else if ((res.list[0].components.pm10 > 21) && (res.list[0].components.pm10 <= 61)) {colorAirPM10 = 'rgba(28, 199, 57, 0.2)'; colorBorderAir10 = 'rgb(28, 199, 57)'}
+              else if ((res.list[0].components.pm10 > 0) && (res.list[0].components.pm10 <= 21)) {colorAirPM10 = 'rgba(54, 162, 235, 0.2)'; colorBorderAir10 = 'rgb(54, 162, 235)'};
+
+
+              if (res.list[0].components.pm2_5 > 121) {colorAirPM25 = 'rgba(153, 102, 255, 0.2)'; colorBorderAir25 = 'rgb(153, 102, 255)'}
+              else if ((res.list[0].components.pm2_5 > 85) && (res.list[0].components.pm2_5 <= 121)) {colorAirPM25 = 'rgba(255, 99, 132, 0.2)'; colorBorderAir25 = 'rgb(255, 99, 132)'}
+              else if ((res.list[0].components.pm2_5 > 61) && (res.list[0].components.pm2_5 <= 85)) {colorAirPM25 = 'rgba(255, 159, 64, 0.2)'; colorBorderAir25 = 'rgb(255, 159, 64)'}
+              else if ((res.list[0].components.pm2_5 > 37) && (res.list[0].components.pm2_5 <= 61)) {colorAirPM25 = 'rgba(255, 205, 86, 0.2)'; colorBorderAir25 = 'rgb(255, 205, 86)'}
+              else if ((res.list[0].components.pm2_5 > 13) && (res.list[0].components.pm2_5 <= 37)) {colorAirPM25 = 'rgba(28, 199, 57, 0.2)'; colorBorderAir25 = 'rgb(28, 199, 57)'}
+              else if ((res.list[0].components.pm2_5 > 0) && (res.list[0].components.pm2_5 <= 13)) {colorAirPM25 = 'rgba(54, 162, 235, 0.2)'; colorBorderAir25 = 'rgb(54, 162, 235)'};
+           
+              if (res.list[0].components.no2 > 401) {colorAirNo2 = 'rgba(153, 102, 255, 0.2)'; colorBorderAirNo2 = 'rgb(153, 102, 255)'}
+              else if ((res.list[0].components.no2 > 201) && (res.list[0].components.no2 <= 401)) {colorAirNo2 = 'rgba(255, 99, 132, 0.2)'; colorBorderAirNo2 = 'rgb(255, 99, 132)'}
+              else if ((res.list[0].components.no2 > 151) && (res.list[0].components.no2 <= 201)) {colorAirNo2 = 'rgba(255, 159, 64, 0.2)'; colorBorderAirNo2 = 'rgb(255, 159, 64)'}
+              else if ((res.list[0].components.no2 > 101) && (res.list[0].components.no2 <= 151)) {colorAirNo2 = 'rgba(255, 205, 86, 0.2)'; colorBorderAirNo2 = 'rgb(255, 205, 86)'}
+              else if ((res.list[0].components.no2 > 41) && (res.list[0].components.no2 <= 101)) {colorAirNo2 = 'rgba(28, 199, 57, 0.2)'; colorBorderAirNo2 = 'rgb(28, 199, 57)'}
+              else if ((res.list[0].components.no2 > 0) && (res.list[0].components.no2 <= 41)) {colorAirNo2 = 'rgba(54, 162, 235, 0.2)'; colorBorderAirNo2 = 'rgb(54, 162, 235)'};
+           
+              if (res.list[0].components.so2 > 501) {colorAirNo2 = 'rgba(153, 102, 255, 0.2)'; colorBorderAirNo2 = 'rgb(153, 102, 255)'}
+              else if ((res.list[0].components.so2 > 351) && (res.list[0].components.so2 <= 501)) {colorAirSo2 = 'rgba(255, 99, 132, 0.2)'; colorBorderAirSo2 = 'rgb(255, 99, 132)'}
+              else if ((res.list[0].components.so2 > 201) && (res.list[0].components.so2 <= 351)) {colorAirSo2 = 'rgba(255, 159, 64, 0.2)'; colorBorderAirSo2 = 'rgb(255, 159, 64)'}
+              else if ((res.list[0].components.so2 > 101) && (res.list[0].components.so2 <= 201)) {colorAirSo2 = 'rgba(255, 205, 86, 0.2)'; colorBorderAirSo2 = 'rgb(255, 205, 86)'}
+              else if ((res.list[0].components.so2 > 51) && (res.list[0].components.so2 <= 101)) {colorAirSo2 = 'rgba(28, 199, 57, 0.2)'; colorBorderAirSo2 = 'rgb(28, 199, 57)'}
+              else if ((res.list[0].components.so2 > 0) && (res.list[0].components.so2 <= 51)) {colorAirSo2 = 'rgba(54, 162, 235, 0.2)'; colorBorderAirSo2 = 'rgb(54, 162, 235)'};
+           
+            dataAirDraw(res.list[0].components.pm10 + " µg/m3", "#pm10", 15);
+            dataAirDraw(res.list[0].components.pm2_5 + " µg/m3", "#pm25", 15);
+            dataAirDraw(res.list[0].components.no2 + " µg/m3", "#no2", 15);
+            dataAirDraw(res.list[0].components.so2 + " µg/m3", "#so3", 15);
+        
+        
+              let dataChartAir = {
+            labels: ["PM10", "PM2,5", "no2", "so2"],
+            datasets: [
+                 {label: "",
+                 data: [res.list[0].components.pm10, res.list[0].components.pm2_5, res.list[0].components.no2, res.list[0].components.so2],
+            backgroundColor: [
+              colorAirPM10,
+              colorAirPM25,
+              colorAirNo2,
+              colorAirSo2,
+              ],
+            borderColor: [
+              colorBorderAir10,
+              colorBorderAir25,
+              colorBorderAirNo2,
+              colorBorderAirSo2,
+              ],
+            borderWidth: 1 }
+             ]};
+
+        let optionsChartAir = {
+                plugins:{
+                  tooltip:{
+                    enabled: false,
+                  },
+                  legend:{
+                    labels:{
+                      generateLabels: false,
+                    }
+                  }
+                }
+            };
+
+        let canvasDrawAir = document.querySelector("#myChartAir");
+
+        let ctxDrawAir = canvasDrawAir.getContext("2d");
+
+        myBarChart = new Chart(ctxDrawAir, {
+        type: 'bar',
+        data: dataChartAir,
+        options: optionsChartAir
+        });
+
+        function dataAirDraw (parText, sitePos, startPos) {
+              const canvas = document.querySelector(sitePos);
+              const ctx = canvas.getContext("2d");
+              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+              ctx.font = "18px Arial";
+              ctx.fillStyle = 'grey';
+              ctx.fillText(parText, 110, startPos)};
+
+              /* if ((res.list[0].components.pm10 >= 180) || (res.list[0].components.pm2_5 >= 110) || (res.list[0].components.no2 >= 400) || (res.list[0].components.o3 >= 240)) {elementTerazPowietrze.innerHTML = "bardzo złe"}
               else if ((180 > res.list[0].components.pm10 > 90.1) || (110 > res.list[0].components.pm2_5 > 55.1) || (400 > res.list[0].components.no2 > 200.1) || (240 >res.list[0].components.o3 > 180.1)) {elementTerazPowietrze.innerHTML = "złe"}
               else if ((90 > res.list[0].components.pm10 > 50.1) || (55 > res.list[0].components.pm2_5 > 30.1) || (200 > res.list[0].components.no2 > 100.1) || (180 >res.list[0].components.o3 > 120.1)) {elementTerazPowietrze.innerHTML = "umiarkowane"}
               else if ((50 > res.list[0].components.pm10 > 25.1) || (30 > res.list[0].components.pm2_5 > 15.1) || (100 > res.list[0].components.no2 > 50.1) || (120 >res.list[0].components.o3 > 60.1)) {elementTerazPowietrze.innerHTML = "dobre"}
-              else if ((25 > res.list[0].components.pm10 > 0) || (15 > res.list[0].components.pm2_5 > 0) || (50 > res.list[0].components.no2 > 0) || (60 >res.list[0].components.o3 > 0)) {elementTerazPowietrze.innerHTML = "bardzo dobre"}
+              else if ((25 > res.list[0].components.pm10 > 0) || (15 > res.list[0].components.pm2_5 > 0) || (50 > res.list[0].components.no2 > 0) || (60 >res.list[0].components.o3 > 0)) {elementTerazPowietrze.innerHTML = "bardzo dobre"} */
                     })
                   })
 
@@ -514,11 +645,13 @@
       document.querySelector("#wpisyMiast").addEventListener("change", (wybor) => {
               let mojWybor = wybor.target.value;
               myLineChart.destroy();
+              myBarChart.destroy();
               getCoordinates(mojWybor);
       });
 
       document.querySelector("#przyciskSzukaj").addEventListener("click", () => {
               myLineChart.destroy();
+              myBarChart.destroy();
               let parCity = document.querySelector("#szukaj").value;
               getCoordinates(parCity);
               miasta.push(parCity);
