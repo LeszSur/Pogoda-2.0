@@ -31,6 +31,7 @@
   <section>
     <div class="pogodaAktualna"> 
       <div>Temp. odczuwalna: <span class="temp_od"></span></div>
+      <div>Wilgotność: <span class="wilgotnosc"></span></div>
       <div>Ciśnienie: <span class="cisnienie"></span></div>
       <div>Wiatr: <span class="wiatr"></span>
       <table>
@@ -98,40 +99,48 @@
       <h2 id="opisJutro"></h2>
       <div class="pogodaJutro">
         <h2><span class="temp"></span></h2>
-        <div>Wiatr: <span class="wiatr"></span>
+        <div>Wilgotność: <span class="wilgotnosc"></span></div>
+        <div>
         <table>
-          <tr><td id="wiatrJutro">
-          </td></tr>
+          <tr>
+            <td>Wiatr:</td>
+            <td id="wiatrJutro"><span class="wiatr"></span></td>
+            <td></td></tr>
+            <td></td></tr>
         </table></div>
-
+        </div>
       </div>
 
-    </div>
     <div id="panel">
       <h2 id="pojutrze"></h2>
       <canvas id="obrazekPojutrze" height="90"></canvas>
       <h2 id="opisPojutrze"></h2>
       <div class="pogodaPojutrze">
         <h2><span class="temp"></span></h2>
-        <div>Wiatr: <span class="wiatr"></span>
-        <table>
-          <tr><td id="wiatrPojutrze">
-          </td></tr>
-        </table></div>
+        <div>Wilgotność: <span class="wilgotnosc"></span></div>
+          <table>
+            <tr>
+              <td>Wiatr:</td>
+              <td id="wiatrPojutrze"><span class="wiatr"></span></td>
+              <td></td></tr>
+          </table>
+        </div>
       </div>
-    </div>
+
     <div id="panel">
       <h2 id="zaTrzy"></h2>
       <canvas id="obrazekZa3" height="90"></canvas>
       <h2 id="opisZa3"></h2>
       <div class="pogodaZa3">
         <h2><span class="temp"></span></h2>
-        <div>Wiatr: <span class="wiatr"></span>
-        <table>
-          <tr><td id="wiatrZa3">
-          </td></tr>
-        </table></div>
-      </div>
+        <div>Wilgotność: <span class="wilgotnosc"></span></div>
+          <table>
+            <tr>
+              <td>Wiatr:</td>
+              <td id="wiatrZa3"><span class="wiatr"></span></td>
+              <td></td></tr>
+          </table>
+    </div>
     </div>
   </section>
 
@@ -149,6 +158,7 @@
     let elementTerazOpis = document.querySelector("#opisAktualna");
     let elementTerazTemp = document.querySelector("#temp");
     let elementTerazTempO = document.querySelector(".pogodaAktualna .temp_od");
+    let elementTerazWilgotnosc = document.querySelector(".pogodaAktualna .wilgotnosc");
     let elementTerazCisnienie = document.querySelector(".pogodaAktualna .cisnienie");
     let elementTerazPowietrze = document.querySelector(".powietrze");
     let elementTerazWiatr = document.querySelector(".pogodaAktualna .wiatr");
@@ -181,16 +191,19 @@
     let elementJutroTemp = document.querySelector(".pogodaJutro .temp");
     let elementJutroZachmurzenie = document.querySelector(".pogodaJutro .zachmurzenie");
     let elementJutroWiatr = document.querySelector(".pogodaJutro .wiatr");
+    let elementJutroWilgotnosc = document.querySelector(".pogodaJutro .wilgotnosc");
 
     let elementPojutrzeOpis = document.querySelector("#opisPojutrze");
     let elementPojutrzeTemp = document.querySelector(".pogodaPojutrze .temp");
     let elementPojutrzeZachmurzenie = document.querySelector(".pogodaPojutrze .zachmurzenie");
     let elementPojutrzeWiatr = document.querySelector(".pogodaPojutrze .wiatr");
+    let elementPojutrzeWilgotnosc = document.querySelector(".pogodaPojutrze .wilgotnosc");
 
     let elementZa3Opis = document.querySelector("#opisZa3");
     let elementZa3Temp = document.querySelector(".pogodaZa3 .temp");
     let elementZa3Zachmurzenie = document.querySelector(".pogodaZa3 .zachmurzenie");
     let elementZa3Wiatr = document.querySelector(".pogodaZa3 .wiatr");
+    let elementZa3Wilgotnosc = document.querySelector(".pogodaZa3 .wilgotnosc");
 
     let miasta = [];
     let putStorage = [];
@@ -372,6 +385,10 @@
       .then(res => res.json())
       .then(res => { 
 
+          console.log(res);
+
+          console.log();
+
           loader.classList.add("visible"); 
 
           setTimeout(() => {
@@ -384,6 +401,7 @@
             ustawWiatr(res.list[0].wind.deg, "#wiatrAktualna");
             elementTerazTemp.innerHTML = Math.round(res.list[0].main.temp) + " °C";
             elementTerazTempO.innerHTML = Math.round(res.list[0].main.feels_like) + " °C";
+            elementTerazWilgotnosc.innerHTML = res.list[0].main.humidity + " %";
             elementTerazCisnienie.innerHTML = res.list[0].main.pressure + " hPa";
             elementTerazWiatr.innerHTML = res.list[0].wind.speed + " m/s";
 
@@ -410,18 +428,21 @@
             ustawWiatr(res.list[wybor].wind.deg, "#wiatrJutro");
             elementJutroTemp.innerHTML = Math.round(res.list[wybor].main.temp) + " °C";
             elementJutroWiatr.innerHTML = res.list[wybor].wind.speed + " m/s";
+            elementJutroWilgotnosc.innerHTML = res.list[0].main.humidity + " %";
 
             elementPojutrzeOpis.innerHTML = res.list[wybor+8].weather[0].description;
             wstawObrazek(res.list[wybor+8].weather[0].icon, "#obrazekPojutrze", 20, 90);
             ustawWiatr(res.list[wybor+8].wind.deg, "#wiatrPojutrze");
             elementPojutrzeTemp.innerHTML = Math.round(res.list[wybor+8].main.temp) + " °C";
             elementPojutrzeWiatr.innerHTML = res.list[wybor+8].wind.speed + " m/s";
+            elementPojutrzeWilgotnosc.innerHTML = res.list[0].main.humidity + " %";
 
             elementZa3Opis.innerHTML = res.list[wybor+16].weather[0].description; 
             wstawObrazek(res.list[wybor+16].weather[0].icon, "#obrazekZa3", 20, 90);
             ustawWiatr(res.list[wybor+16].wind.deg, "#wiatrZa3");
             elementZa3Temp.innerHTML = Math.round(res.list[wybor+16].main.temp) + " °C";
             elementZa3Wiatr.innerHTML = res.list[wybor+16].wind.speed + " m/s";
+            elementZa3Wilgotnosc.innerHTML = res.list[0].main.humidity + " %";
             
           }, 250);
 
@@ -618,7 +639,6 @@
               const ctx = canvas.getContext("2d");
               ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
               ctx.font = "16px bold Arial";
-              console.log(color);
               switch (color) {
                   case 0 : ctx.fillStyle = 'rgb(153, 102, 255';
                   break;
