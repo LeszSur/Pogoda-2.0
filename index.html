@@ -59,8 +59,16 @@
     <canvas id="pm10" width="212" height="20"></canvas>
     <canvas id="pm25" width="212" height="20"></canvas>
     <canvas id="no2" width="212" height="20"></canvas>
-    <canvas id="so3" width="212" height="20"></canvas>
+    <canvas id="so2" width="212" height="20"></canvas>
     </div>
+</section>
+<section>
+  <div>
+  <canvas id="pm10t" width="209" height="20"></canvas>
+  <canvas id="pm25t" width="209" height="20"></canvas>
+  <canvas id="no2t" width="209" height="20"></canvas>
+  <canvas id="so2t" width="209" height="20"></canvas>
+  </div>
 </section>
   
   <h3>Prognoza godzinowa:</h3>
@@ -188,7 +196,6 @@
     let putStorage = [];
     let nowyWpisMiasta = document.querySelector(".wpisyMiast");
     let szukaj = "";
-     //let myLineChart;
 
     const czasPomiaru = new Date();
     const dzienPomiaru = czasPomiaru.getDay();
@@ -521,41 +528,40 @@
                           { elementTerazPowietrze.innerHTML = "bardzo dobra"; elementTerazPowietrze.style.color = 'rgb(54, 162, 235)'};
 
 
-              if (res.list[0].components.pm10 > 201) {colorAirPM10 = 'rgba(153, 102, 255, 0.2)'; colorBorderAir10 = 'rgb(153, 102, 255)'}
-              else if ((res.list[0].components.pm10 > 141) && (res.list[0].components.pm10 <= 201)) {colorAirPM10 = 'rgba(255, 99, 132, 0.2)'; colorBorderAir10 = 'rgb(255, 99, 132)'}
-              else if ((res.list[0].components.pm10 > 101) && (res.list[0].components.pm10 <= 141)) {colorAirPM10 = 'rgba(255, 159, 64, 0.2)'; colorBorderAir10 = 'rgb(255, 159, 64)'}
-              else if ((res.list[0].components.pm10 > 61) && (res.list[0].components.pm10 <= 101)) {colorAirPM10 = 'rgba(255, 205, 86, 0.2)'; colorBorderAir10 = 'rgb(255, 205, 86)'}
-              else if ((res.list[0].components.pm10 > 21) && (res.list[0].components.pm10 <= 61)) {colorAirPM10 = 'rgba(28, 199, 57, 0.2)'; colorBorderAir10 = 'rgb(28, 199, 57)'}
-              else if ((res.list[0].components.pm10 > 0) && (res.list[0].components.pm10 <= 21)) {colorAirPM10 = 'rgba(54, 162, 235, 0.2)'; colorBorderAir10 = 'rgb(54, 162, 235)'};
+              if (res.list[0].components.pm10 > 201) {colorAirPM10 = 'rgba(153, 102, 255, 0.2)'; colorBorderAir10 = 'rgb(153, 102, 255)'; textAirDraw("b.zły", "#pm10t", 15, 0)}
+              else if ((res.list[0].components.pm10 > 141) && (res.list[0].components.pm10 <= 201)) {colorAirPM10 = 'rgba(255, 99, 132, 0.2)'; colorBorderAir10 = 'rgb(255, 99, 132)'; textAirDraw(" zły ", "#pm10t", 15, 1)}
+              else if ((res.list[0].components.pm10 > 101) && (res.list[0].components.pm10 <= 141)) {colorAirPM10 = 'rgba(255, 159, 64, 0.2)'; colorBorderAir10 = 'rgb(255, 159, 64)'; textAirDraw("dost.", "#pm10t", 15, 2)}
+              else if ((res.list[0].components.pm10 > 61) && (res.list[0].components.pm10 <= 101)) {colorAirPM10 = 'rgba(255, 205, 86, 0.2)'; colorBorderAir10 = 'rgb(255, 205, 86)'; textAirDraw("umiar.", "#pm10t", 15, 3)}
+              else if ((res.list[0].components.pm10 > 21) && (res.list[0].components.pm10 <= 61)) {colorAirPM10 = 'rgba(28, 199, 57, 0.2)'; colorBorderAir10 = 'rgb(28, 199, 57)'; textAirDraw(" db ", "#pm10t", 15, 4)}
+              else if ((res.list[0].components.pm10 > 0) && (res.list[0].components.pm10 <= 21)) {colorAirPM10 = 'rgba(54, 162, 235, 0.2)'; colorBorderAir10 = 'rgb(54, 162, 235)'; textAirDraw(" bdb ", "#pm10t", 15, 5)};
 
 
-              if (res.list[0].components.pm2_5 > 121) {colorAirPM25 = 'rgba(153, 102, 255, 0.2)'; colorBorderAir25 = 'rgb(153, 102, 255)'}
-              else if ((res.list[0].components.pm2_5 > 85) && (res.list[0].components.pm2_5 <= 121)) {colorAirPM25 = 'rgba(255, 99, 132, 0.2)'; colorBorderAir25 = 'rgb(255, 99, 132)'}
-              else if ((res.list[0].components.pm2_5 > 61) && (res.list[0].components.pm2_5 <= 85)) {colorAirPM25 = 'rgba(255, 159, 64, 0.2)'; colorBorderAir25 = 'rgb(255, 159, 64)'}
-              else if ((res.list[0].components.pm2_5 > 37) && (res.list[0].components.pm2_5 <= 61)) {colorAirPM25 = 'rgba(255, 205, 86, 0.2)'; colorBorderAir25 = 'rgb(255, 205, 86)'}
-              else if ((res.list[0].components.pm2_5 > 13) && (res.list[0].components.pm2_5 <= 37)) {colorAirPM25 = 'rgba(28, 199, 57, 0.2)'; colorBorderAir25 = 'rgb(28, 199, 57)'}
-              else if ((res.list[0].components.pm2_5 > 0) && (res.list[0].components.pm2_5 <= 13)) {colorAirPM25 = 'rgba(54, 162, 235, 0.2)'; colorBorderAir25 = 'rgb(54, 162, 235)'};
+              if (res.list[0].components.pm2_5 > 121) {colorAirPM25 = 'rgba(153, 102, 255, 0.2)'; colorBorderAir25 = 'rgb(153, 102, 255)'; textAirDraw("b.zły", "#pm25t", 15, 0)}
+              else if ((res.list[0].components.pm2_5 > 85) && (res.list[0].components.pm2_5 <= 121)) {colorAirPM25 = 'rgba(255, 99, 132, 0.2)'; colorBorderAir25 = 'rgb(255, 99, 132)'; textAirDraw(" zły ", "#pm25t", 15, 1)}
+              else if ((res.list[0].components.pm2_5 > 61) && (res.list[0].components.pm2_5 <= 85)) {colorAirPM25 = 'rgba(255, 159, 64, 0.2)'; colorBorderAir25 = 'rgb(255, 159, 64)'; textAirDraw("dost.", "#pm25t", 15, 2)}
+              else if ((res.list[0].components.pm2_5 > 37) && (res.list[0].components.pm2_5 <= 61)) {colorAirPM25 = 'rgba(255, 205, 86, 0.2)'; colorBorderAir25 = 'rgb(255, 205, 86)'; textAirDraw("umiar.", "#pm25t", 15, 3)}
+              else if ((res.list[0].components.pm2_5 > 13) && (res.list[0].components.pm2_5 <= 37)) {colorAirPM25 = 'rgba(28, 199, 57, 0.2)'; colorBorderAir25 = 'rgb(28, 199, 57)'; textAirDraw(" db ", "#pm25t", 15, 4)}
+              else if ((res.list[0].components.pm2_5 > 0) && (res.list[0].components.pm2_5 <= 13)) {colorAirPM25 = 'rgba(54, 162, 235, 0.2)'; colorBorderAir25 = 'rgb(54, 162, 235)'; textAirDraw(" bdb ", "#pm25t", 15, 5)};
            
-              if (res.list[0].components.no2 > 401) {colorAirNo2 = 'rgba(153, 102, 255, 0.2)'; colorBorderAirNo2 = 'rgb(153, 102, 255)'}
-              else if ((res.list[0].components.no2 > 201) && (res.list[0].components.no2 <= 401)) {colorAirNo2 = 'rgba(255, 99, 132, 0.2)'; colorBorderAirNo2 = 'rgb(255, 99, 132)'}
-              else if ((res.list[0].components.no2 > 151) && (res.list[0].components.no2 <= 201)) {colorAirNo2 = 'rgba(255, 159, 64, 0.2)'; colorBorderAirNo2 = 'rgb(255, 159, 64)'}
-              else if ((res.list[0].components.no2 > 101) && (res.list[0].components.no2 <= 151)) {colorAirNo2 = 'rgba(255, 205, 86, 0.2)'; colorBorderAirNo2 = 'rgb(255, 205, 86)'}
-              else if ((res.list[0].components.no2 > 41) && (res.list[0].components.no2 <= 101)) {colorAirNo2 = 'rgba(28, 199, 57, 0.2)'; colorBorderAirNo2 = 'rgb(28, 199, 57)'}
-              else if ((res.list[0].components.no2 > 0) && (res.list[0].components.no2 <= 41)) {colorAirNo2 = 'rgba(54, 162, 235, 0.2)'; colorBorderAirNo2 = 'rgb(54, 162, 235)'};
+              if (res.list[0].components.no2 > 401) {colorAirNo2 = 'rgba(153, 102, 255, 0.2)'; colorBorderAirNo2 = 'rgb(153, 102, 255)'; textAirDraw("b.zły", "#no2t", 15, 0)}
+              else if ((res.list[0].components.no2 > 201) && (res.list[0].components.no2 <= 401)) {colorAirNo2 = 'rgba(255, 99, 132, 0.2)'; colorBorderAirNo2 = 'rgb(255, 99, 132)'; textAirDraw(" zły ", "#no2t", 15, 1)}
+              else if ((res.list[0].components.no2 > 151) && (res.list[0].components.no2 <= 201)) {colorAirNo2 = 'rgba(255, 159, 64, 0.2)'; colorBorderAirNo2 = 'rgb(255, 159, 64)'; textAirDraw("dost.", "#no2t", 15, 2)}
+              else if ((res.list[0].components.no2 > 101) && (res.list[0].components.no2 <= 151)) {colorAirNo2 = 'rgba(255, 205, 86, 0.2)'; colorBorderAirNo2 = 'rgb(255, 205, 86)'; textAirDraw("umiar.", "#no2t", 15, 3)}
+              else if ((res.list[0].components.no2 > 41) && (res.list[0].components.no2 <= 101)) {colorAirNo2 = 'rgba(28, 199, 57, 0.2)'; colorBorderAirNo2 = 'rgb(28, 199, 57)'; textAirDraw(" db ", "#no2t", 15, 4)}
+              else if ((res.list[0].components.no2 > 0) && (res.list[0].components.no2 <= 41)) {colorAirNo2 = 'rgba(54, 162, 235, 0.2)'; colorBorderAirNo2 = 'rgb(54, 162, 235)'; textAirDraw(" bdb ", "#no2t", 15, 5)};
            
-              if (res.list[0].components.so2 > 501) {colorAirNo2 = 'rgba(153, 102, 255, 0.2)'; colorBorderAirNo2 = 'rgb(153, 102, 255)'}
-              else if ((res.list[0].components.so2 > 351) && (res.list[0].components.so2 <= 501)) {colorAirSo2 = 'rgba(255, 99, 132, 0.2)'; colorBorderAirSo2 = 'rgb(255, 99, 132)'}
-              else if ((res.list[0].components.so2 > 201) && (res.list[0].components.so2 <= 351)) {colorAirSo2 = 'rgba(255, 159, 64, 0.2)'; colorBorderAirSo2 = 'rgb(255, 159, 64)'}
-              else if ((res.list[0].components.so2 > 101) && (res.list[0].components.so2 <= 201)) {colorAirSo2 = 'rgba(255, 205, 86, 0.2)'; colorBorderAirSo2 = 'rgb(255, 205, 86)'}
-              else if ((res.list[0].components.so2 > 51) && (res.list[0].components.so2 <= 101)) {colorAirSo2 = 'rgba(28, 199, 57, 0.2)'; colorBorderAirSo2 = 'rgb(28, 199, 57)'}
-              else if ((res.list[0].components.so2 > 0) && (res.list[0].components.so2 <= 51)) {colorAirSo2 = 'rgba(54, 162, 235, 0.2)'; colorBorderAirSo2 = 'rgb(54, 162, 235)'};
+              if (res.list[0].components.so2 > 501) {colorAirNo2 = 'rgba(153, 102, 255, 0.2)'; colorBorderAirNo2 = 'rgb(153, 102, 255)'; textAirDraw("b.zły", "#so2t", 15, 0)}
+              else if ((res.list[0].components.so2 > 351) && (res.list[0].components.so2 <= 501)) {colorAirSo2 = 'rgba(255, 99, 132, 0.2)'; colorBorderAirSo2 = 'rgb(255, 99, 132)'; textAirDraw(" zły ", "#so2t", 15, 1)}
+              else if ((res.list[0].components.so2 > 201) && (res.list[0].components.so2 <= 351)) {colorAirSo2 = 'rgba(255, 159, 64, 0.2)'; colorBorderAirSo2 = 'rgb(255, 159, 64)'; textAirDraw("dost.", "#so2t", 15, 2)}
+              else if ((res.list[0].components.so2 > 101) && (res.list[0].components.so2 <= 201)) {colorAirSo2 = 'rgba(255, 205, 86, 0.2)'; colorBorderAirSo2 = 'rgb(255, 205, 86)'; textAirDraw("umiar.", "#so2t", 15, 3)}
+              else if ((res.list[0].components.so2 > 51) && (res.list[0].components.so2 <= 101)) {colorAirSo2 = 'rgba(28, 199, 57, 0.2)'; colorBorderAirSo2 = 'rgb(28, 199, 57)'; textAirDraw(" db ", "#so2t", 15, 4)}
+              else if ((res.list[0].components.so2 > 0) && (res.list[0].components.so2 <= 51)) {colorAirSo2 = 'rgba(54, 162, 235, 0.2)'; colorBorderAirSo2 = 'rgb(54, 162, 235)'; textAirDraw(" bdb ", "#so2t", 15, 5)};
            
             dataAirDraw(res.list[0].components.pm10 + " µg/m3", "#pm10", 15);
             dataAirDraw(res.list[0].components.pm2_5 + " µg/m3", "#pm25", 15);
             dataAirDraw(res.list[0].components.no2 + " µg/m3", "#no2", 15);
-            dataAirDraw(res.list[0].components.so2 + " µg/m3", "#so3", 15);
-        
-        
+            dataAirDraw(res.list[0].components.so2 + " µg/m3", "#so2", 15);
+
               let dataChartAir = {
             labels: ["PM10", "PM2,5", "no2", "so2"],
             datasets: [
@@ -607,11 +613,27 @@
               ctx.fillStyle = 'grey';
               ctx.fillText(parText, 110, startPos)};
 
-              /* if ((res.list[0].components.pm10 >= 180) || (res.list[0].components.pm2_5 >= 110) || (res.list[0].components.no2 >= 400) || (res.list[0].components.o3 >= 240)) {elementTerazPowietrze.innerHTML = "bardzo złe"}
-              else if ((180 > res.list[0].components.pm10 > 90.1) || (110 > res.list[0].components.pm2_5 > 55.1) || (400 > res.list[0].components.no2 > 200.1) || (240 >res.list[0].components.o3 > 180.1)) {elementTerazPowietrze.innerHTML = "złe"}
-              else if ((90 > res.list[0].components.pm10 > 50.1) || (55 > res.list[0].components.pm2_5 > 30.1) || (200 > res.list[0].components.no2 > 100.1) || (180 >res.list[0].components.o3 > 120.1)) {elementTerazPowietrze.innerHTML = "umiarkowane"}
-              else if ((50 > res.list[0].components.pm10 > 25.1) || (30 > res.list[0].components.pm2_5 > 15.1) || (100 > res.list[0].components.no2 > 50.1) || (120 >res.list[0].components.o3 > 60.1)) {elementTerazPowietrze.innerHTML = "dobre"}
-              else if ((25 > res.list[0].components.pm10 > 0) || (15 > res.list[0].components.pm2_5 > 0) || (50 > res.list[0].components.no2 > 0) || (60 >res.list[0].components.o3 > 0)) {elementTerazPowietrze.innerHTML = "bardzo dobre"} */
+        function textAirDraw (parText, sitePos, startPos, color) {
+              const canvas = document.querySelector(sitePos);
+              const ctx = canvas.getContext("2d");
+              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+              ctx.font = "16px bold Arial";
+              console.log(color);
+              switch (color) {
+                  case 0 : ctx.fillStyle = 'rgb(153, 102, 255';
+                  break;
+                  case 1 : ctx.fillStyle = 'rgb(255, 99, 132)';
+                  break;
+                  case 2 : ctx.fillStyle = 'rgb(255, 159, 64)';
+                  break; 
+                  case 3 : ctx.fillStyle = 'rgb(255, 205, 86)';
+                  break;
+                  case 4 : ctx.fillStyle = 'rgb(28, 199, 57)';
+                  break;
+                  case 5 : ctx.fillStyle = 'rgb(54, 162, 235)';
+                  break;};
+
+              ctx.fillText(parText, 140, startPos)};              
                     })
                   })
 
@@ -620,6 +642,12 @@
 
 
       window.addEventListener("load", () => {
+
+        loader.classList.add("visible"); 
+
+          setTimeout(() => {
+
+          loader.classList.remove("visible");
       
       navigator.geolocation.getCurrentPosition((position) => {
         let lon = position.coords.longitude;
@@ -639,7 +667,7 @@
                       miasta.push(getStorage[i]);
                       lista(miasta[miasta.length - 1]);}
             }; 
-   
+          }, 250);    
     });
 
       document.querySelector("#wpisyMiast").addEventListener("change", (wybor) => {
