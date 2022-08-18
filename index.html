@@ -33,11 +33,15 @@
       <div>Temp. odczuwalna: <span class="temp_od"></span></div>
       <div>Wilgotność: <span class="wilgotnosc"></span></div>
       <div>Ciśnienie: <span class="cisnienie"></span></div>
-      <div>Wiatr: <span class="wiatr"></span>
+      <div>
+   <section>
       <table>
-        <tr><td id="wiatrAktualna">
-        </td></tr>
-      </table></div>
+        <tr>
+          <td>Wiatr:</td>
+          <td class="wiatrAktualna"></td>
+          <td id="wiatr"></td>
+        </tr>
+      </table></section></div>
     </div>
     <div>
       <h1 id="opisAktualna"></h1>
@@ -104,9 +108,9 @@
         <table>
           <tr>
             <td>Wiatr:</td>
-            <td id="wiatrJutro"><span class="wiatr"></span></td>
-            <td></td></tr>
-            <td></td></tr>
+            <td class="wiatrJutro"></td>
+            <td id="wiatr"></td></tr>
+            </tr>
         </table></div>
         </div>
       </div>
@@ -118,28 +122,30 @@
       <div class="pogodaPojutrze">
         <h2><span class="temp"></span></h2>
         <div>Wilgotność: <span class="wilgotnosc"></span></div>
+        <div>
           <table>
             <tr>
               <td>Wiatr:</td>
-              <td id="wiatrPojutrze"><span class="wiatr"></span></td>
-              <td></td></tr>
-          </table>
+              <td class="wiatrPojutrze"></td>
+              <td id="wiatr"></td></tr>
+          </table></div>
         </div>
       </div>
 
     <div id="panel">
-      <h2 id="zaTrzy"></h2>
+      <h2 id="za3"></h2>
       <canvas id="obrazekZa3" height="90"></canvas>
       <h2 id="opisZa3"></h2>
       <div class="pogodaZa3">
         <h2><span class="temp"></span></h2>
         <div>Wilgotność: <span class="wilgotnosc"></span></div>
+        <div>
           <table>
             <tr>
               <td>Wiatr:</td>
-              <td id="wiatrZa3"><span class="wiatr"></span></td>
-              <td></td></tr>
-          </table>
+              <td class="wiatrZa3"></td>
+              <td id="wiatr"></td></tr>
+          </table></div>
     </div>
     </div>
   </section>
@@ -161,7 +167,8 @@
     let elementTerazWilgotnosc = document.querySelector(".pogodaAktualna .wilgotnosc");
     let elementTerazCisnienie = document.querySelector(".pogodaAktualna .cisnienie");
     let elementTerazPowietrze = document.querySelector(".powietrze");
-    let elementTerazWiatr = document.querySelector(".pogodaAktualna .wiatr");
+    
+    let elementTerazWiatrGraf = document.querySelector(".wiatrAktualna");
 
     let elementGodzinowa1 = document.querySelector(".pogodaGodzinowa .g1 #godz1");
     let elementGodzinowa2 = document.querySelector(".pogodaGodzinowa .g2 #godz2");
@@ -190,19 +197,19 @@
     let elementJutroOpis = document.querySelector("#opisJutro");
     let elementJutroTemp = document.querySelector(".pogodaJutro .temp");
     let elementJutroZachmurzenie = document.querySelector(".pogodaJutro .zachmurzenie");
-    let elementJutroWiatr = document.querySelector(".pogodaJutro .wiatr");
+    let elementJutroWiatr = document.querySelector(".pogodaJutro #wiatr");
     let elementJutroWilgotnosc = document.querySelector(".pogodaJutro .wilgotnosc");
 
     let elementPojutrzeOpis = document.querySelector("#opisPojutrze");
     let elementPojutrzeTemp = document.querySelector(".pogodaPojutrze .temp");
     let elementPojutrzeZachmurzenie = document.querySelector(".pogodaPojutrze .zachmurzenie");
-    let elementPojutrzeWiatr = document.querySelector(".pogodaPojutrze .wiatr");
+    let elementPojutrzeWiatr = document.querySelector(".pogodaPojutrze #wiatr");
     let elementPojutrzeWilgotnosc = document.querySelector(".pogodaPojutrze .wilgotnosc");
 
     let elementZa3Opis = document.querySelector("#opisZa3");
     let elementZa3Temp = document.querySelector(".pogodaZa3 .temp");
     let elementZa3Zachmurzenie = document.querySelector(".pogodaZa3 .zachmurzenie");
-    let elementZa3Wiatr = document.querySelector(".pogodaZa3 .wiatr");
+    let elementZa3Wiatr = document.querySelector(".pogodaZa3 #wiatr");
     let elementZa3Wilgotnosc = document.querySelector(".pogodaZa3 .wilgotnosc");
 
     let miasta = [];
@@ -216,7 +223,7 @@
     
     wstawDzień("#jutro", dzienPomiaru + 1);
     wstawDzień("#pojutrze", dzienPomiaru + 2);
-    wstawDzień("#zaTrzy", dzienPomiaru + 3);
+    wstawDzień("#za3", dzienPomiaru + 3);
 
 
 
@@ -398,12 +405,12 @@
             elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.city.name + " " + res.city.country;
             elementTerazOpis.innerHTML = res.list[0].weather[0].description;
             wstawObrazek(res.list[0].weather[0].icon, "#obrazekAktualna", 60, 160);
-            ustawWiatr(res.list[0].wind.deg, "#wiatrAktualna");
+            ustawWiatr(res.list[0].wind.deg, ".pogodaAktualna #wiatr");
             elementTerazTemp.innerHTML = Math.round(res.list[0].main.temp) + " °C";
             elementTerazTempO.innerHTML = Math.round(res.list[0].main.feels_like) + " °C";
             elementTerazWilgotnosc.innerHTML = res.list[0].main.humidity + " %";
             elementTerazCisnienie.innerHTML = res.list[0].main.pressure + " hPa";
-            elementTerazWiatr.innerHTML = res.list[0].wind.speed + " m/s";
+            elementTerazWiatrGraf.innerHTML = res.list[0].wind.speed + " m/s";
 
             wstawObrazek(res.list[1].weather[0].icon, "#ico", 10, 49);
             wstawObrazek(res.list[2].weather[0].icon, "#ico", 150, 49);
@@ -425,24 +432,24 @@
             
             elementJutroOpis.innerHTML = res.list[wybor].weather[0].description;
             wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro", 20, 90);
-            ustawWiatr(res.list[wybor].wind.deg, "#wiatrJutro");
+            ustawWiatr(res.list[wybor].wind.deg, ".wiatrJutro");
             elementJutroTemp.innerHTML = Math.round(res.list[wybor].main.temp) + " °C";
             elementJutroWiatr.innerHTML = res.list[wybor].wind.speed + " m/s";
             elementJutroWilgotnosc.innerHTML = res.list[0].main.humidity + " %";
 
             elementPojutrzeOpis.innerHTML = res.list[wybor+8].weather[0].description;
             wstawObrazek(res.list[wybor+8].weather[0].icon, "#obrazekPojutrze", 20, 90);
-            ustawWiatr(res.list[wybor+8].wind.deg, "#wiatrPojutrze");
+            ustawWiatr(res.list[wybor+8].wind.deg, ".wiatrPojutrze");
             elementPojutrzeTemp.innerHTML = Math.round(res.list[wybor+8].main.temp) + " °C";
             elementPojutrzeWiatr.innerHTML = res.list[wybor+8].wind.speed + " m/s";
-            elementPojutrzeWilgotnosc.innerHTML = res.list[0].main.humidity + " %";
+            elementPojutrzeWilgotnosc.innerHTML = res.list[wybor+8].main.humidity + " %";
 
             elementZa3Opis.innerHTML = res.list[wybor+16].weather[0].description; 
             wstawObrazek(res.list[wybor+16].weather[0].icon, "#obrazekZa3", 20, 90);
-            ustawWiatr(res.list[wybor+16].wind.deg, "#wiatrZa3");
+            ustawWiatr(res.list[wybor+16].wind.deg, ".wiatrZa3");
             elementZa3Temp.innerHTML = Math.round(res.list[wybor+16].main.temp) + " °C";
             elementZa3Wiatr.innerHTML = res.list[wybor+16].wind.speed + " m/s";
-            elementZa3Wilgotnosc.innerHTML = res.list[0].main.humidity + " %";
+            elementZa3Wilgotnosc.innerHTML = res.list[wybor+16].main.humidity + " %";
             
           }, 250);
 
@@ -462,8 +469,8 @@
               const canvas = document.querySelector(sitePos);
               const ctx = canvas.getContext("2d");
               ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-              ctx.font = "18px Arial";
-              ctx.fillStyle = 'black';
+              ctx.font = "italic 16px arial,serif";
+              ctx.fillStyle = 'grey';
               ctx.fillText(timeText, 15, startPos)};
 
         let dataChart = {
@@ -579,7 +586,7 @@
               else if ((res.list[0].components.so2 > 0) && (res.list[0].components.so2 <= 51)) {colorAirSo2 = 'rgba(54, 162, 235, 0.2)'; colorBorderAirSo2 = 'rgb(54, 162, 235)'; textAirDraw(" bdb ", "#so2t", 15, 5)};
            
             dataAirDraw(res.list[0].components.pm10 + " µg/m3", "#pm10", 15);
-            dataAirDraw(res.list[0].components.pm2_5 + " µg/m3", "#pm25", 15);
+            dataAirDraw(res.list[0].components.pm2_5 + " µg/m3", "#pm25",15);
             dataAirDraw(res.list[0].components.no2 + " µg/m3", "#no2", 15);
             dataAirDraw(res.list[0].components.so2 + " µg/m3", "#so2", 15);
 
@@ -629,7 +636,7 @@
         function dataAirDraw (parText, sitePos, startPos) {
               const canvas = document.querySelector(sitePos);
               const ctx = canvas.getContext("2d");
-              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
               ctx.font = "18px Arial";
               ctx.fillStyle = 'grey';
               ctx.fillText(parText, 110, startPos)};
@@ -637,8 +644,8 @@
         function textAirDraw (parText, sitePos, startPos, color) {
               const canvas = document.querySelector(sitePos);
               const ctx = canvas.getContext("2d");
-              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-              ctx.font = "16px bold Arial";
+              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+              ctx.font = "italic bold 16px arial,serif";
               switch (color) {
                   case 0 : ctx.fillStyle = 'rgb(153, 102, 255';
                   break;

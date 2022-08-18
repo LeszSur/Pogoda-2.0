@@ -32,10 +32,9 @@ h3{
 } 
     
 div{
-    margin: 10px;
+    margin: 8px;
     font-size: 15px
 }
-
 
 #opisAktualna{
     margin-left: 100px;
@@ -43,31 +42,51 @@ div{
 }
 
 #opisJutro{
-        color: grey
-    }   
+    color: #2e8a8a
+}
 
 #opisPojutrze{
-        color: grey
-    }
-        
+    color: #2e8a8a
+}
+
 #opisZa3{
-        color: grey
-    }
+    color: #2e8a8a
+}
 
 #temp{
     margin-left: 100px;
+    font-size: 40px;
     color: green
-}
-.temp{
-    margin: 24px;
-    font-size: 20px;
-    color: grey
 }
 .powietrze{
     margin: 20px;
     font-size: 24px;
 }
-
+.temp{
+    margin: 24px;
+    font-size: 28px;
+    color: darkcyan
+}
+.temp_od{
+    margin: 24px;
+    font-size: 16px;
+    font-style: italic;
+}
+.wilgotnosc{
+    margin: 24px;
+    font-size: 16px;
+    font-style: italic;
+}
+.cisnienie{
+    margin: 24px;
+    font-size: 16px;
+    font-style: italic;
+}
+.wiatr{
+    margin: 24px;
+    font-size: 16px;
+    font-style: italic;
+}
 canvas{
     margin-left: 40px
 }
@@ -87,10 +106,10 @@ section {
 
 #panel{
     font-size: 14px;
-    color:solid green 1px;
+    color:solid darkcyan 1px;
     margin: 10px;
     padding: 5px;
-    border: solid green 1px;
+    border: solid darkcyan 1px;
     border-radius: 15px
 }
 
