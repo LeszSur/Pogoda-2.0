@@ -58,9 +58,64 @@ div{
     font-size: 40px;
     color: green
 }
+.sunrise{
+    margin: 24px;
+    font-size: 16px;
+    font-style: italic;
+}
+
+.sunriseZone{
+    font-size: 12px;
+    font-style: italic;
+    color: rgb(54, 162, 235)
+}
+
+.sunset{
+    margin: 24px;
+    font-size: 16px;
+    font-style: italic;
+}
+
+.sunsetZone{
+    font-size: 12px;
+    font-style: italic;
+    color: rgb(54, 162, 235)
+}
+
+.commentSky1{
+    margin-left: 80px;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.commentSky2{
+
+    font-size: 14px;
+    font-style: italic;
+}
+
+.commentSky3{
+
+    font-size: 14px;
+    font-style: italic;
+}
+
+.commentTemp{
+    margin-left: 85px;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.commentWind{
+
+    font-size: 14px;
+    font-style: italic;
+}
+
 .powietrze{
     margin: 20px;
     font-size: 24px;
+    color: rgb(32, 172, 197)
 }
 .temp{
     margin: 24px;
