@@ -470,9 +470,7 @@
               .then(res => res.json())
               .then(res => { 
            
-              console.log(res);
-
-              loader.classList.add("visible"); 
+            loader.classList.add("visible"); 
 
             setTimeout(() => {
 
@@ -514,20 +512,23 @@
               else if (parNumber == 50) {skyMatrix[5] = skyMatrix[5] + 1}
             };
 
-            console.log(skyMatrix);
-
             
             if (skyMatrix[0] > 0 && skyMatrix[1] == 0) 
               {elementCommentSky1.innerHTML = "W najbliższych godzinach bedzie słonecznie."}
-            else if ((skyMatrix[0] == 2) && (skyMatrix[1] == 2))
+            else if (((skyMatrix[0] == 2) && (skyMatrix[1] == 2)) || ((skyMatrix[0] == 3) && (skyMatrix[1] == 1)))
               {elementCommentSky1.innerHTML = "Będzie częściowo słonecznie."}
+            else if (skyMatrix[0] == 1 && ((skyMatrix[1] > 0) || (skyMatrix[2] > 0)))
+              {elementCommentSky1.innerHTML = "W najbliższych godzinach będzie znaczne zachmurzenie."} 
             else if (skyMatrix[0] == 0 && ((skyMatrix[1] > 0) || (skyMatrix[2] > 0)))
-              {elementCommentSky1.innerHTML = "W najbliższych godzinach niebo będzie zachmurzone."};
+              {elementCommentSky1.innerHTML = "W najbliższych godzinach będzie pochmurno."};
 
             if (skyMatrix[2] > 1) {elementCommentSky2.innerHTML = "Możliwe są opady deszczu."}
-            else if ((skyMatrix[2] > 2) && (res.list[0].main.humidity > 70)) {elementCommentSky2.innerHTML = "Bedzie padało."};
+            else if ((skyMatrix[2] > 2) && (((res.list[0].main.humidity + res.list[1].main.humidity)/2)  > 70)) 
+                {elementCommentSky2.innerHTML = "Bedzie padało."};
 
-            if (skyMatrix[4] > 0) {elementCommentSky2.innerHTML = "Możliwe są opady śniegu."};
+            if (skyMatrix[4] > 0) {elementCommentSky2.innerHTML = "Możliwe są opady śniegu."}
+            else if ((skyMatrix[4] > 2) && (((res.list[0].main.humidity + res.list[1].main.humidity)/2)  > 70)) 
+                {elementCommentSky2.innerHTML = "Bedzie padało."};
 
             if (skyMatrix[3] > 0) {elementCommentSky3.innerHTML = "Uwaga burza"};
 
