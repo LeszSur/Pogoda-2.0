@@ -12,7 +12,7 @@
 
 <body>
   <section id="wybor">
-    <canvas id="field1" height="15" width="500"></canvas>
+    <canvas id="field1" height="15" width="450"></canvas>
     <p>Wpisz miasto:</p>
     
     <input id="szukaj"></input>
@@ -51,6 +51,26 @@
       <canvas id="obrazekAktualna" height="150" width="300"></canvas>
     </div>
   </section>
+    <div id="detailsDay">
+      <h2>Szczegóły dnia:</h2>
+      <section>
+      <div>Wschód słońca: <span class="sunrise"></span></div>
+      <div><span class="sunriseZone"></span></div>
+      <div><span class="commentSky1"></span></div>
+      <div><span class="commentSky2"></span></div>
+      <div><span class="commentSky3"></span></div>
+      </section>
+
+      <section>
+      <div>Zachód słońca: <span class="sunset"></span></div>
+      <div><span class="sunsetZone"></span></div>
+      <div><span class="commentTemp"></span></div>
+      <div><span class="commentWind"></span></div>
+    </div>
+  <section>
+
+  </section>
+
 
   <h3>Jakość powietrza:</h3>
   <div><strong><span class="powietrze"></strong></bold></div>
@@ -85,16 +105,16 @@
   </section>
   <section>
     <div>
-    <canvas id="timeg1" width="94" height="20"></canvas>
-    <canvas id="timeg2" width="94" height="20"></canvas>
-    <canvas id="timeg3" width="94" height="20"></canvas>
-    <canvas id="timeg4" width="94" height="20"></canvas>
-    <canvas id="timeg5" width="94" height="20"></canvas>
-    <canvas id="timeg6" width="94" height="20"></canvas>
-    <canvas id="timeg7" width="94" height="20"></canvas>
-    <canvas id="timeg8" width="94" height="20"></canvas>
+    <canvas id="timeg1" width="94" height="65"></canvas>
+    <canvas id="timeg2" width="94" height="65"></canvas>
+    <canvas id="timeg3" width="94" height="65"></canvas>
+    <canvas id="timeg4" width="94" height="65"></canvas>
+    <canvas id="timeg5" width="94" height="65"></canvas>
+    <canvas id="timeg6" width="94" height="65"></canvas>
+    <canvas id="timeg7" width="94" height="65"></canvas>
+    <canvas id="timeg8" width="94" height="65"></canvas>
   </div>
-</section>
+  </section>
 <h3>Prognoza na najbliższe 3 dni:</h3>
   <section>
     <div id="panel">
@@ -151,7 +171,7 @@
   </section>
 
   <div>
-    <p id="foot">Pogodynka LeszSur v2.2 - data.source: geoapify.com & openweathermap.org</p>
+    <p id="foot">Pogodynka LeszSur v2.3 - data.source: geoapify.com & openweathermap.org</p>
   </div>
 
 
@@ -167,8 +187,19 @@
     let elementTerazWilgotnosc = document.querySelector(".pogodaAktualna .wilgotnosc");
     let elementTerazCisnienie = document.querySelector(".pogodaAktualna .cisnienie");
     let elementTerazPowietrze = document.querySelector(".powietrze");
-    
+
     let elementTerazWiatrGraf = document.querySelector(".wiatrAktualna");
+    
+    let elementSunrise = document.querySelector(".sunrise");
+    let elementSunriseZone = document.querySelector(".sunriseZone");
+    let elementSunset = document.querySelector(".sunset");
+    let elementSunsetZone = document.querySelector(".sunsetZone");
+    
+    let elementCommentSky1 = document.querySelector(".commentSky1");
+    let elementCommentSky2 = document.querySelector(".commentSky2");
+    let elementCommentSky3 = document.querySelector(".commentSky3");
+    let elementCommentTemp = document.querySelector(".commentTemp");
+    let elementCommentWind = document.querySelector(".commentWind");
 
     let elementGodzinowa1 = document.querySelector(".pogodaGodzinowa .g1 #godz1");
     let elementGodzinowa2 = document.querySelector(".pogodaGodzinowa .g2 #godz2");
@@ -218,6 +249,13 @@
     let szukaj = "";
 
     const czasPomiaru = new Date();
+    const miesiacPomiaru = czasPomiaru.getMonth();
+    let poraRoku = 0;
+
+    if (miesiacPomiaru > 2 || miesiacPomiaru < 10){poraRoku = 7200}
+      else {poraRoku = 3600};
+
+
     const dzienPomiaru = czasPomiaru.getDay();
     const godzinaPomiaru = czasPomiaru.getHours();
     
@@ -227,7 +265,7 @@
 
 
 
-    function wstawDzień (sitePos, select){
+  function wstawDzień (sitePos, select){
 
       switch (select) {
         case 1: document.querySelector(sitePos).innerHTML = "poniedziałek";
@@ -261,7 +299,7 @@
     };
 
 
-    function wstawObrazek(select, sitePos, startPos, size) {
+  function wstawObrazek(select, sitePos, startPos, size) {
 
     const canvas = document.querySelector(sitePos);
     const ctx = canvas.getContext("2d");
@@ -309,7 +347,7 @@
       case "50n": image.src = "img/mgla.png";
         break;
       };
-    };
+  };
 
 
     function ustawWiatr(parRotate, parSelector) {
@@ -323,14 +361,53 @@
             fetch(adresCoordinates)
             .then(res => res.json())
             .then(res => { 
-                lon = parseFloat(res.features[0].geometry.coordinates[0]);
-                lat = parseFloat(res.features[0].geometry.coordinates[1]);
+                let lon = parseFloat(res.features[0].geometry.coordinates[0]);
+                let lat = parseFloat(res.features[0].geometry.coordinates[1]);
+                getWeatherNow(lat, lon);
                 getWeather(lat, lon);
             })
-          }
+    }
           
-    function getWeather(parLat, parLon){
-        let adresWeather = "https://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
+        function getWeatherNow(parLat, parLon){
+                let adresWeatherNow = "https://api.openweathermap.org/data/2.5/weather?lat="+ parLat +"&lon="+ parLon +
+                  "&lang=PL&units=metric&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
+
+                  fetch(adresWeatherNow)
+                  .then(res => res.json())
+                  .then(res => { 
+
+                  elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.name + " " + res.sys.country;
+                  elementTerazOpis.innerHTML = res.weather[0].description;
+                  wstawObrazek(res.weather[0].icon, "#obrazekAktualna", 60, 160);
+                  ustawWiatr(180 + res.wind.deg, ".pogodaAktualna #wiatr");
+                  elementTerazTemp.innerHTML = Math.round(res.main.temp) + " °C";
+                  elementTerazTempO.innerHTML = Math.round(res.main.feels_like) + " °C";
+                  elementTerazWilgotnosc.innerHTML = res.main.humidity + " %";
+                  elementTerazCisnienie.innerHTML = res.main.pressure + " hPa";
+                  elementTerazWiatrGraf.innerHTML = res.wind.speed + " m/s";
+
+                  let sunriseDate = new Date((res.sys.sunrise)*1000);
+                  let sunriseText = new String(sunriseDate);
+                  let sunriseZoneDate = new Date((res.sys.sunrise - poraRoku + res.timezone)*1000);
+                  let sunriseZoneText = new String(sunriseZoneDate);
+                  elementSunrise.innerHTML = sunriseText.slice(16, 21);
+                  elementSunriseZone.innerHTML = sunriseZoneText.slice(16, 21);
+
+                  let sunsetDate = new Date((res.sys.sunset)*1000);
+                  let sunsetText = new String(sunsetDate);
+                  let sunsetZoneDate = new Date((res.sys.sunset - poraRoku + res.timezone)*1000);
+                  let sunsetZoneText = new String(sunsetZoneDate);
+                  elementSunset.innerHTML = sunsetText.slice(16, 21);
+                  elementSunsetZone.innerHTML = sunsetZoneText.slice(16, 21);
+
+                  })
+
+                .catch(error => document.querySelector("#opisAktualna").innerHTML = "błąd wczytywania danych");
+        };
+    
+    
+        function getWeather(parLat, parLon){
+                let adresWeather = "https://api.openweathermap.org/data/2.5/forecast?lat="+ parLat +"&lon="+ parLon +
                   "&lang=PL&units=metric&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
 
                 
@@ -341,13 +418,13 @@
                   break;
                   case 1 : wybor = 13;
                   break;
-                  case 2 : wybor = 13;
+                  case 2 : wybor = 12;
                   break; 
                   case 3 : wybor = 12;
                   break;
                   case 4 : wybor = 12;
                   break;
-                  case 5 : wybor = 12;
+                  case 5 : wybor = 11;
                   break;
                   case 6 : wybor = 11;
                   break;
@@ -357,60 +434,106 @@
                   break;
                   case 9 : wybor = 10;
                   break; 
-                  case 10 : wybor = 9;
+                  case 10 : wybor = 10;
                   break; 
                   case 11 : wybor = 9;
                   break;
                   case 12 : wybor = 9;
                   break;
-                  case 13 : wybor = 8;
+                  case 13 : wybor = 9;
                   break; 
                   case 14 : wybor = 8;
                   break;
                   case 15 : wybor = 8;
                   break;
-                  case 16 : wybor = 7;
+                  case 16 : wybor = 8;
                   break;
                   case 17 : wybor = 7;
                   break;
                   case 18 : wybor = 7;
                   break;
-                  case 19 : wybor = 6;
+                  case 19 : wybor = 7;
                   break;
                   case 20 : wybor = 6;
                   break;
                   case 21 : wybor = 6;
                   break;
-                  case 22 : wybor = 5;
+                  case 22 : wybor = 6;
                   break;
-                  case 23 : wybor = 5;
+                  case 23 : wybor = 5 ;
                   break;
           
-                }
+                };
 
-      fetch(adresWeather)
-      .then(res => res.json())
-      .then(res => { 
 
-          console.log(res);
+              fetch(adresWeather)
+              .then(res => res.json())
+              .then(res => { 
+           
+              console.log(res);
 
-          console.log();
+              loader.classList.add("visible"); 
 
-          loader.classList.add("visible"); 
+            setTimeout(() => {
 
-          setTimeout(() => {
+            loader.classList.remove("visible");
 
-          loader.classList.remove("visible");
+            let sky = [(res.list[1].weather[0].icon).slice(0, 2), (res.list[2].weather[0].icon).slice(0, 2), 
+                    (res.list[3].weather[0].icon).slice(0, 2), (res.list[4].weather[0].icon).slice(0, 2)];
+            
+            let temp = [res.list[1].main.temp, res.list[2].main.temp, res.list[3].main.temp, res.list[4].main.temp];
 
-            elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.city.name + " " + res.city.country;
-            elementTerazOpis.innerHTML = res.list[0].weather[0].description;
-            wstawObrazek(res.list[0].weather[0].icon, "#obrazekAktualna", 60, 160);
-            ustawWiatr(res.list[0].wind.deg, ".pogodaAktualna #wiatr");
-            elementTerazTemp.innerHTML = Math.round(res.list[0].main.temp) + " °C";
-            elementTerazTempO.innerHTML = Math.round(res.list[0].main.feels_like) + " °C";
-            elementTerazWilgotnosc.innerHTML = res.list[0].main.humidity + " %";
-            elementTerazCisnienie.innerHTML = res.list[0].main.pressure + " hPa";
-            elementTerazWiatrGraf.innerHTML = res.list[0].wind.speed + " m/s";
+            let minTemp = temp[0];
+            for (i = 0; i < 4; i++) {
+            if (temp[i] < minTemp) {
+                minTemp = temp[i];
+              }
+            };
+
+            let maxTemp = temp[0];
+            for (i = 0; i < 4; i++) {
+            if (temp[i] > maxTemp) {
+                maxTemp = temp[i];
+              }
+            };
+
+            elementCommentTemp.innerHTML = "Maksymalna temperatura wyniesie "+Math.round(maxTemp)+"°C, minimalna "+Math.round(minTemp)+"°C."
+            
+            let skyMatrix = [0, 0, 0, 0, 0, 0];
+
+            for (i=0; i<4; i++){
+
+              let par = new String(sky[i]);
+              let parNumber = parseInt(par);
+            
+              if (parNumber == 1) {skyMatrix[0] = skyMatrix[0] + 1} 
+              else if ((parNumber == 2) || (parNumber == 3) || (parNumber == 4)) {skyMatrix[1] = skyMatrix[1] + 1}
+              else if ((parNumber == 9) || (parNumber == 10)) {skyMatrix[2] = skyMatrix[2] + 1}
+              else if (parNumber == 11) {skyMatrix[3] = skyMatrix[3] + 1}
+              else if (parNumber == 13) {skyMatrix[4] = skyMatrix[4] + 1}
+              else if (parNumber == 50) {skyMatrix[5] = skyMatrix[5] + 1}
+            };
+
+            console.log(skyMatrix);
+
+            
+            if (skyMatrix[0] > 0 && skyMatrix[1] == 0) 
+              {elementCommentSky1.innerHTML = "W najbliższych godzinach bedzie słonecznie."}
+            else if ((skyMatrix[0] == 2) && (skyMatrix[1] == 2))
+              {elementCommentSky1.innerHTML = "Będzie częściowo słonecznie."}
+            else if (skyMatrix[0] == 0 && ((skyMatrix[1] > 0) || (skyMatrix[2] > 0)))
+              {elementCommentSky1.innerHTML = "W najbliższych godzinach niebo będzie zachmurzone."};
+
+            if (skyMatrix[2] > 1) {elementCommentSky2.innerHTML = "Możliwe są opady deszczu."}
+            else if ((skyMatrix[2] > 2) && (res.list[0].main.humidity > 70)) {elementCommentSky2.innerHTML = "Bedzie padało."};
+
+            if (skyMatrix[4] > 0) {elementCommentSky2.innerHTML = "Możliwe są opady śniegu."};
+
+            if (skyMatrix[3] > 0) {elementCommentSky3.innerHTML = "Uwaga burza"};
+
+            if ((res.list[1].wind.speed < 15) && (res.list[1].wind.speed > 9))
+                {elementCommentWind.innerHTML = "Będzie silnie wiało."}
+            else if (res.list[1].wind.speed >= 15) {elementCommentWind.innerHTML = "Będzie bardzo silnie wiało."};
 
             wstawObrazek(res.list[1].weather[0].icon, "#ico", 10, 49);
             wstawObrazek(res.list[2].weather[0].icon, "#ico", 150, 49);
@@ -421,59 +544,77 @@
             wstawObrazek(res.list[7].weather[0].icon, "#ico", 850, 49);
             wstawObrazek(res.list[8].weather[0].icon, "#ico", 990, 49);
 
-            timeDraw(res.list[1].dt_txt, "#timeg1", 15);
-            timeDraw(res.list[2].dt_txt, "#timeg2", 15);
-            timeDraw(res.list[3].dt_txt, "#timeg3", 15);
-            timeDraw(res.list[4].dt_txt, "#timeg4", 15);
-            timeDraw(res.list[5].dt_txt, "#timeg5", 15);
-            timeDraw(res.list[6].dt_txt, "#timeg6", 15);
-            timeDraw(res.list[7].dt_txt, "#timeg7", 15);
-            timeDraw(res.list[8].dt_txt, "#timeg8", 15);
+            timeDraw(res.list[1].dt_txt, res.list[1].dt, "#timeg1");
+            timeDraw(res.list[2].dt_txt, res.list[2].dt, "#timeg2");
+            timeDraw(res.list[3].dt_txt, res.list[3].dt, "#timeg3");
+            timeDraw(res.list[4].dt_txt, res.list[4].dt, "#timeg4");
+            timeDraw(res.list[5].dt_txt, res.list[5].dt, "#timeg5");
+            timeDraw(res.list[6].dt_txt, res.list[6].dt, "#timeg6");
+            timeDraw(res.list[7].dt_txt, res.list[7].dt, "#timeg7");
+            timeDraw(res.list[8].dt_txt, res.list[8].dt, "#timeg8");
             
             elementJutroOpis.innerHTML = res.list[wybor].weather[0].description;
             wstawObrazek(res.list[wybor].weather[0].icon, "#obrazekJutro", 20, 90);
-            ustawWiatr(res.list[wybor].wind.deg, ".wiatrJutro");
+            ustawWiatr(180 + res.list[wybor].wind.deg, ".wiatrJutro");
             elementJutroTemp.innerHTML = Math.round(res.list[wybor].main.temp) + " °C";
             elementJutroWiatr.innerHTML = res.list[wybor].wind.speed + " m/s";
             elementJutroWilgotnosc.innerHTML = res.list[0].main.humidity + " %";
 
             elementPojutrzeOpis.innerHTML = res.list[wybor+8].weather[0].description;
             wstawObrazek(res.list[wybor+8].weather[0].icon, "#obrazekPojutrze", 20, 90);
-            ustawWiatr(res.list[wybor+8].wind.deg, ".wiatrPojutrze");
+            ustawWiatr(180 + res.list[wybor+8].wind.deg, ".wiatrPojutrze");
             elementPojutrzeTemp.innerHTML = Math.round(res.list[wybor+8].main.temp) + " °C";
             elementPojutrzeWiatr.innerHTML = res.list[wybor+8].wind.speed + " m/s";
             elementPojutrzeWilgotnosc.innerHTML = res.list[wybor+8].main.humidity + " %";
 
             elementZa3Opis.innerHTML = res.list[wybor+16].weather[0].description; 
             wstawObrazek(res.list[wybor+16].weather[0].icon, "#obrazekZa3", 20, 90);
-            ustawWiatr(res.list[wybor+16].wind.deg, ".wiatrZa3");
+            ustawWiatr(180 + res.list[wybor+16].wind.deg, ".wiatrZa3");
             elementZa3Temp.innerHTML = Math.round(res.list[wybor+16].main.temp) + " °C";
             elementZa3Wiatr.innerHTML = res.list[wybor+16].wind.speed + " m/s";
             elementZa3Wilgotnosc.innerHTML = res.list[wybor+16].main.humidity + " %";
             
-          }, 250);
+            }, 250);
 
             function tempChart (parText) {
               let tempText = Math.round(res.list[parText].main.temp) + " °C";
-              return tempText};
+              return tempText
+            };
 
             function timeChart (parText) {
               let String;
               let TextString;
               String = res.list[parText].main.temp;
               TextString = String.toString();
-              return TextString};
+              return TextString
+            };
 
-             function timeDraw (parText, sitePos, startPos) {
-              let timeText = parText.slice(11, 16);
-              const canvas = document.querySelector(sitePos);
-              const ctx = canvas.getContext("2d");
-              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-              ctx.font = "italic 16px arial,serif";
-              ctx.fillStyle = 'grey';
-              ctx.fillText(timeText, 15, startPos)};
+            function timeDraw (parText, par, sitePos) {
+              let parTextString = new String(parText);
+              let parseDate = Date.parse(parText);
+              let unixTimeDate = parseDate/1000;          
+              let zoneTime = unixTimeDate - (par - unixTimeDate) + res.city.timezone;
+              let zoneTimeDate = new Date(zoneTime*1000);
+              let zoneTimeText = new String(zoneTimeDate);
+              let timeText1 = parTextString.slice(11, 16); 
+              let timeText2 = zoneTimeText.slice(16, 21);
+              let canvas = document.querySelector(sitePos);
+              let ctx = canvas.getContext("2d");
+              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+              for (i=0; i<1; i++){
+                ctx.font = "bold italic 18px arial";
+                ctx.fillStyle = 'grey';
+                ctx.fillText(timeText1, 18, 13)
+              };
+              for (i=0; i<1; i++){
+                ctx.font = "bold italic 12px arial";
+                ctx.fillStyle = 'rgb(54, 162, 235)';
+                ctx.fillText(timeText2, 24, 35)
+              };
 
-        let dataChart = {
+            };
+
+            let dataChart = {
             labels: [],
             datasets: [
                  {label: "",
@@ -491,9 +632,9 @@
                   pointHoverBackgroundColor : 'rgba(255,255,255,1)',
                   pointHoverBorderColor : 'rgba(236,115,87, 1)',
                   data: [], }
-             ]};
+                  ]};
 
-        let optionsChart = {
+                  let optionsChart = {
                 plugins:{
                   tooltip:{
                     enabled: false,
@@ -504,27 +645,27 @@
                     }
                   }
                 }
-              };
+            };
 
 
               
-        for (i=0; i<8; i++){
-        
-          dataChart.labels.push(tempChart(i));
-          dataChart.datasets[0].data.push(timeChart(i))
-        };
+            for (i=1; i<9; i++){
+            
+              dataChart.labels.push(tempChart(i));
+              dataChart.datasets[0].data.push(timeChart(i))
+            };
 
-      Chart.defaults.font.size = 18;
+            Chart.defaults.font.size = 18;
 
-      let canvasDraw = document.querySelector("#myChart");
+            let canvasDraw = document.querySelector("#myChart");
 
-      let ctxDraw = canvasDraw.getContext("2d");
+            let ctxDraw = canvasDraw.getContext("2d");
 
-      myLineChart = new Chart(ctxDraw, {
-      type: 'line',
-      data: dataChart,
-      options: optionsChart
-      });
+            myLineChart = new Chart(ctxDraw, {
+            type: 'line',
+            data: dataChart,
+            options: optionsChart
+            });
 
             let adresAir = "https://api.openweathermap.org/data/2.5/air_pollution?lat="
                     + parLat +"&lon=" + parLon + "&appid=992ff55e7b3c5989a38e4ff2e9ff1413";
@@ -585,32 +726,32 @@
               else if ((res.list[0].components.so2 > 51) && (res.list[0].components.so2 <= 101)) {colorAirSo2 = 'rgba(28, 199, 57, 0.2)'; colorBorderAirSo2 = 'rgb(28, 199, 57)'; textAirDraw(" db ", "#so2t", 15, 4)}
               else if ((res.list[0].components.so2 > 0) && (res.list[0].components.so2 <= 51)) {colorAirSo2 = 'rgba(54, 162, 235, 0.2)'; colorBorderAirSo2 = 'rgb(54, 162, 235)'; textAirDraw(" bdb ", "#so2t", 15, 5)};
            
-            dataAirDraw(res.list[0].components.pm10 + " µg/m3", "#pm10", 15);
-            dataAirDraw(res.list[0].components.pm2_5 + " µg/m3", "#pm25",15);
-            dataAirDraw(res.list[0].components.no2 + " µg/m3", "#no2", 15);
-            dataAirDraw(res.list[0].components.so2 + " µg/m3", "#so2", 15);
+              dataAirDraw(res.list[0].components.pm10 + " µg/m3", "#pm10", 15);
+              dataAirDraw(res.list[0].components.pm2_5 + " µg/m3", "#pm25",15);
+              dataAirDraw(res.list[0].components.no2 + " µg/m3", "#no2", 15);
+              dataAirDraw(res.list[0].components.so2 + " µg/m3", "#so2", 15);
 
               let dataChartAir = {
-            labels: ["PM10", "PM2,5", "no2", "so2"],
-            datasets: [
+                labels: ["PM10", "PM2,5", "no2", "so2"],
+                datasets: [
                  {label: "",
                  data: [res.list[0].components.pm10, res.list[0].components.pm2_5, res.list[0].components.no2, res.list[0].components.so2],
-            backgroundColor: [
-              colorAirPM10,
-              colorAirPM25,
-              colorAirNo2,
-              colorAirSo2,
-              ],
-            borderColor: [
-              colorBorderAir10,
-              colorBorderAir25,
-              colorBorderAirNo2,
-              colorBorderAirSo2,
-              ],
-            borderWidth: 1 }
+              backgroundColor: [
+                  colorAirPM10,
+                  colorAirPM25,
+                  colorAirNo2,
+                  colorAirSo2,
+                  ],
+              borderColor: [
+                  colorBorderAir10,
+                  colorBorderAir25,
+                  colorBorderAirNo2,
+                  colorBorderAirSo2,
+                  ],
+                borderWidth: 1 }
              ]};
 
-        let optionsChartAir = {
+                let optionsChartAir = {
                 plugins:{
                   tooltip:{
                     enabled: false,
@@ -621,98 +762,124 @@
                     }
                   }
                 }
-            };
+              };
 
-        let canvasDrawAir = document.querySelector("#myChartAir");
+              let canvasDrawAir = document.querySelector("#myChartAir");
 
-        let ctxDrawAir = canvasDrawAir.getContext("2d");
+              let ctxDrawAir = canvasDrawAir.getContext("2d");
 
-        myBarChart = new Chart(ctxDrawAir, {
-        type: 'bar',
-        data: dataChartAir,
-        options: optionsChartAir
-        });
+              myBarChart = new Chart(ctxDrawAir, {
+              type: 'bar',
+              data: dataChartAir,
+              options: optionsChartAir
+              });
 
-        function dataAirDraw (parText, sitePos, startPos) {
-              const canvas = document.querySelector(sitePos);
-              const ctx = canvas.getContext("2d");
-              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-              ctx.font = "18px Arial";
-              ctx.fillStyle = 'grey';
-              ctx.fillText(parText, 110, startPos)};
+                  function dataAirDraw (parText, sitePos, startPos) {
+                      const canvas = document.querySelector(sitePos);
+                      const ctx = canvas.getContext("2d");
+                      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                      ctx.font = "18px Arial";
+                      ctx.fillStyle = 'grey';
+                      ctx.fillText(parText, 110, startPos)};
 
-        function textAirDraw (parText, sitePos, startPos, color) {
-              const canvas = document.querySelector(sitePos);
-              const ctx = canvas.getContext("2d");
-              ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-              ctx.font = "italic bold 16px arial,serif";
-              switch (color) {
-                  case 0 : ctx.fillStyle = 'rgb(153, 102, 255';
-                  break;
-                  case 1 : ctx.fillStyle = 'rgb(255, 99, 132)';
-                  break;
-                  case 2 : ctx.fillStyle = 'rgb(255, 159, 64)';
-                  break; 
-                  case 3 : ctx.fillStyle = 'rgb(255, 205, 86)';
-                  break;
-                  case 4 : ctx.fillStyle = 'rgb(28, 199, 57)';
-                  break;
-                  case 5 : ctx.fillStyle = 'rgb(54, 162, 235)';
-                  break;};
+                  function textAirDraw (parText, sitePos, startPos, color) {
+                      const canvas = document.querySelector(sitePos);
+                      const ctx = canvas.getContext("2d");
+                      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                      ctx.font = "italic bold 16px arial,serif";
+                      switch (color) {
+                          case 0 : ctx.fillStyle = 'rgb(153, 102, 255';
+                          break;
+                          case 1 : ctx.fillStyle = 'rgb(255, 99, 132)';
+                          break;
+                          case 2 : ctx.fillStyle = 'rgb(255, 159, 64)';
+                          break; 
+                          case 3 : ctx.fillStyle = 'rgb(255, 205, 86)';
+                          break;
+                          case 4 : ctx.fillStyle = 'rgb(28, 199, 57)';
+                          break;
+                          case 5 : ctx.fillStyle = 'rgb(54, 162, 235)';
+                          break;};
 
-              ctx.fillText(parText, 140, startPos)};              
-                    })
-                  })
+                      ctx.fillText(parText, 140, startPos)};              
+            })
+            .catch(error => document.querySelector(".powietrze").innerHTML = "błąd wczytywania danych jakości powietrza")
+              
+          })
+                
+          .catch(error => document.querySelector("#opisAktualna").innerHTML = "błąd wczytywania danych")
 
-    .catch(error => document.querySelector("#opisAktualna").innerHTML = "błąd wczytywania danych")
-                };
+      };
 
 
-      window.addEventListener("load", () => {
+        window.addEventListener("load", () => {
 
         loader.classList.add("visible"); 
 
-          setTimeout(() => {
+        setTimeout(() => {
 
-          loader.classList.remove("visible");
+        loader.classList.remove("visible");
       
-      navigator.geolocation.getCurrentPosition((position) => {
-        let lon = position.coords.longitude;
-        let lat = position.coords.latitude;
-        getWeather(lat, lon);
-      });
+          navigator.geolocation.getCurrentPosition((position) => {
+            let lon = position.coords.longitude;
+            let lat = position.coords.latitude;
+            getWeatherNow(lat, lon);
+            getWeather(lat, lon);
+          });
         
-        let getStorage = localStorage.getItem("miasta");
+          let getStorage = localStorage.getItem("miasta");
                 if (getStorage === null) {
                     lista("");
                     miasta.push("");
-                    return;}
-                else {
-            getStorage = JSON.parse(localStorage.getItem("miasta"))       
-                   
-                    for (i=0; i < getStorage.length; i++) {
-                      miasta.push(getStorage[i]);
-                      lista(miasta[miasta.length - 1]);}
-            }; 
-          }, 250);    
-    });
+                    return;
+                } else {getStorage = JSON.parse(localStorage.getItem("miasta"))
+                          for (i=0; i < getStorage.length; i++) {
+                            miasta.push(getStorage[i]);
+                            lista(miasta[miasta.length - 1]);
+                          }
+                        }; 
+        }, 250);    
+      });
 
       document.querySelector("#wpisyMiast").addEventListener("change", (wybor) => {
-              let mojWybor = wybor.target.value;
-              myLineChart.destroy();
-              myBarChart.destroy();
+              let mojWybor = wybor.target.value
+
+              if (typeof myBarChart === 'undefined') {
+              } else {myBarChart.destroy()};
+
+              if (typeof myLineChart === 'undefined') {
+              } else {myLineChart.destroy()};
+
+              elementCommentSky1.innerHTML = "";
+              elementCommentSky2.innerHTML = "";
+              elementCommentSky3.innerHTML = "";
+              elementCommentTemp.innerHTML = "";
+              elementCommentWind.innerHTML = "";
+              
               getCoordinates(mojWybor);
       });
 
       document.querySelector("#przyciskSzukaj").addEventListener("click", () => {
-              myLineChart.destroy();
-              myBarChart.destroy();
+              
+              if (typeof myBarChart === 'undefined') {
+              } else {myBarChart.destroy()};
+
+              if (typeof myLineChart === 'undefined') {
+              } else {myLineChart.destroy()};
+
               let parCity = document.querySelector("#szukaj").value;
               getCoordinates(parCity);
               miasta.push(parCity);
               lista(parCity);
               localStorage.setItem("miasta", JSON.stringify(miasta));
               document.querySelector("#szukaj").value = "";
+              document.querySelector("#wpisyMiast").value = "";
+
+              elementCommentSky1.innerHTML = "";
+              elementCommentSky2.innerHTML = "";
+              elementCommentSky3.innerHTML = "";
+              elementCommentTemp.innerHTML = "";
+              elementCommentWind.innerHTML = "";
       });
 
       document.querySelector("#przyciskUsun").addEventListener("click", () => {
