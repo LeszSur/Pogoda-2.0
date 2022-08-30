@@ -58,7 +58,7 @@
       <div><span class="sunriseZone"></span></div>
       <div><span class="commentSky1"></span></div>
       <div><span class="commentSky2"></span></div>
-      <div><span class="commentSky3"></span></div>
+
       </section>
 
       <section>
@@ -66,6 +66,7 @@
       <div><span class="sunsetZone"></span></div>
       <div><span class="commentTemp"></span></div>
       <div><span class="commentWind"></span></div>
+      <div><span class="commentThunder"></span></div>
     </div>
   <section>
 
@@ -197,7 +198,7 @@
     
     let elementCommentSky1 = document.querySelector(".commentSky1");
     let elementCommentSky2 = document.querySelector(".commentSky2");
-    let elementCommentSky3 = document.querySelector(".commentSky3");
+    let elementCommentThunder = document.querySelector(".commentThunder");
     let elementCommentTemp = document.querySelector(".commentTemp");
     let elementCommentWind = document.querySelector(".commentWind");
 
@@ -361,12 +362,21 @@
             fetch(adresCoordinates)
             .then(res => res.json())
             .then(res => { 
+
+              loader.classList.add("visible"); 
+
+              setTimeout(() => {
+
+              loader.classList.remove("visible");
+
                 let lon = parseFloat(res.features[0].geometry.coordinates[0]);
                 let lat = parseFloat(res.features[0].geometry.coordinates[1]);
                 getWeatherNow(lat, lon);
                 getWeather(lat, lon);
             })
+          }, 250);
     }
+    
           
         function getWeatherNow(parLat, parLon){
                 let adresWeatherNow = "https://api.openweathermap.org/data/2.5/weather?lat="+ parLat +"&lon="+ parLon +
@@ -375,6 +385,12 @@
                   fetch(adresWeatherNow)
                   .then(res => res.json())
                   .then(res => { 
+
+                    loader.classList.add("visible"); 
+
+                    setTimeout(() => {
+
+                    loader.classList.remove("visible");
 
                   elementTerazNaglowek.innerHTML = "Pogoda aktualna - " + res.name + " " + res.sys.country;
                   elementTerazOpis.innerHTML = res.weather[0].description;
@@ -403,6 +419,8 @@
                   })
 
                 .catch(error => document.querySelector("#opisAktualna").innerHTML = "błąd wczytywania danych");
+                
+              }, 250);
         };
     
     
@@ -495,7 +513,8 @@
               }
             };
 
-            elementCommentTemp.innerHTML = "Maksymalna temperatura wyniesie "+Math.round(maxTemp)+"°C, minimalna "+Math.round(minTemp)+"°C."
+            if ((Math.round(maxTemp)) == (Math.round(minTemp))) { elementCommentTemp.innerHTML = "Temperatura będzie się utrzymywała w okolicy " + Math.round(maxTemp) + "°C."}
+            else {elementCommentTemp.innerHTML = "Maksymalna temperatura wyniesie "+Math.round(maxTemp)+"°C, minimalna "+Math.round(minTemp)+"°C."};
             
             let skyMatrix = [0, 0, 0, 0, 0, 0];
             let skyHalfSun = 0;
@@ -519,12 +538,12 @@
             if (skyMatrix[0] > 0 && skyMatrix[1] == 0) 
               {elementCommentSky1.innerHTML = "W najbliższych godzinach będzie słonecznie."}
             else if (((skyMatrix[0] == 2) && (skyMatrix[1] == 2)) || ((skyMatrix[0] == 3) && (skyMatrix[1] == 1)))
-              {elementCommentSky1.innerHTML = "Będzie częściowo słonecznie."}
+              {elementCommentSky1.innerHTML = "W najbliższych godzinach będzie częściowo słonecznie."}
             else if (skyMatrix[0] == 1 && ((skyMatrix[1] > 0) || (skyMatrix[2] > 0))){
               if (skyHalfSun > 0) {elementCommentSky1.innerHTML = "Bedzie znaczne zachmurzenie z przejaśnieniami."}
                 else {elementCommentSky1.innerHTML = "W najbliższych godzinach będzie znaczne zachmurzenie."} }
             else if (skyMatrix[0] == 0 && ((skyMatrix[1] > 0) || (skyMatrix[2] > 0))){
-              if (skyHalfSun > 0){elementCommentSky1.innerHTML = "Będzie pochmurno z możliwością przejaśnień."}
+              if (skyHalfSun > 0){elementCommentSky1.innerHTML = "W najbliższych godzinach będzie pochmurno z możliwością przejaśnień."}
                 else {elementCommentSky1.innerHTML = "W najbliższych godzinach będzie pochmurno."}};
 
             if (skyMatrix[2] > 1) {elementCommentSky2.innerHTML = "Możliwe są opady deszczu."}
@@ -535,7 +554,7 @@
             else if ((skyMatrix[4] > 2) && (((res.list[0].main.humidity + res.list[1].main.humidity)/2)  > 70)) 
                 {elementCommentSky2.innerHTML = "Będzie padał śnieg."};
 
-            if (skyMatrix[3] > 0) {elementCommentSky3.innerHTML = "Uwaga burza!"};
+            if (skyMatrix[3] > 0) {elementCommentThunder.innerHTML = "Uwaga burza!"};
 
             if ((res.list[1].wind.speed < 15) && (res.list[1].wind.speed > 9))
                 {elementCommentWind.innerHTML = "Będzie silnie wiało."}
@@ -859,7 +878,7 @@
 
               elementCommentSky1.innerHTML = "";
               elementCommentSky2.innerHTML = "";
-              elementCommentSky3.innerHTML = "";
+              elementCommentThunder.innerHTML = "";
               elementCommentTemp.innerHTML = "";
               elementCommentWind.innerHTML = "";
               
@@ -884,7 +903,7 @@
 
               elementCommentSky1.innerHTML = "";
               elementCommentSky2.innerHTML = "";
-              elementCommentSky3.innerHTML = "";
+              elementCommentThunder.innerHTML = "";
               elementCommentTemp.innerHTML = "";
               elementCommentWind.innerHTML = "";
       });
