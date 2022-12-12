@@ -250,10 +250,10 @@
     let szukaj = "";
 
     const czasPomiaru = new Date();
-    const miesiacPomiaru = czasPomiaru.getMonth();
+    const miesiacPomiaru = (czasPomiaru.getMonth() + 1);
     let poraRoku = 0;
 
-    if (miesiacPomiaru > 2 || miesiacPomiaru < 10){poraRoku = 7200}
+    if (miesiacPomiaru > 3 && miesiacPomiaru < 11){poraRoku = 7200}
       else {poraRoku = 3600};
 
 
